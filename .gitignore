@@ -1,0 +1,15 @@
+## Csharp
+**/bin
+**/obj
+*.suo
+**/packages
+**/TestResults
+
+## Java
+**/target
+*.settings
+*.classpath
+*.project
+
+## Scala
+**/.idea
