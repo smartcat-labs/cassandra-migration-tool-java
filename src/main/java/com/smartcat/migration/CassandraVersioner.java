@@ -43,7 +43,7 @@ public class CassandraVersioner {
     }
 
     /**
-     * Get current database version for given migration type with EACH_QUORUM consistency. Select one row since
+     * Get current database version for given migration type with ALL consistency. Select one row since
      * migration history is saved ordered descending by timestamp. If there are no rows in the schema_version table,
      * return 0 as default database version. Data version is changed by executing migrations.
      *
@@ -51,18 +51,12 @@ public class CassandraVersioner {
      * @return Database version for given type
      */
     public int getCurrentVersion(final MigrationType type) {
-        // Select last migration from schema version for given migration type
         final Statement select = QueryBuilder.select().all().from(SCHEMA_VERSION_CF)
                 .where(QueryBuilder.eq(TYPE, type.name())).limit(1).setConsistencyLevel(ConsistencyLevel.ALL);
         final ResultSet result = session.execute(select);
 
         final Row row = result.one();
-
-        if (row == null) {
-            return 0;
-        }
-
-        return row.getInt(VERSION);
+        return row == null ? 0 : row.getInt(VERSION);
     }
 
     /**
@@ -72,14 +66,12 @@ public class CassandraVersioner {
      * @return Success of version update
      */
     public boolean updateVersion(final Migration migration) {
-        // Create insert statement
         final Statement insert = QueryBuilder.insertInto(SCHEMA_VERSION_CF).value(TYPE, migration.getType().name())
                 .value(VERSION, migration.getVersion()).value(TIMESTAMP, System.currentTimeMillis())
                 .value(DESCRIPTION, migration.getDescription()).setConsistencyLevel(ConsistencyLevel.ALL);
 
         try {
             session.execute(insert);
-
             return true;
         } catch (final Exception e) {
             LOGGER.error("Failed to execute update version statement", e);

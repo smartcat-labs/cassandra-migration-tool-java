@@ -5,6 +5,10 @@ import com.smartcat.migration.Migration;
 import com.smartcat.migration.MigrationException;
 import com.smartcat.migration.MigrationType;
 
+/**
+ * Example of data migration used for populating data in table. This shows use case when you need to populate data in
+ * table fast. Can be used for test data, logic can be added to add near production like data in huge amounts.
+ */
 public class InsertBooksMigration extends Migration {
 
     public InsertBooksMigration(final MigrationType type, final int version) {

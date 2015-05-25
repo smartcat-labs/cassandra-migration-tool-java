@@ -9,12 +9,12 @@ public class MigrationEngine {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngine.class);
 
-    private MigrationEngine(){
+    private MigrationEngine() {
     }
 
     /**
      * Create migrator out of session fully prepared for doing migration of resources
-     *
+     * 
      * @param session Datastax driver session object
      * @return migrator instance with versioner and session which can migrate resources
      */
@@ -22,7 +22,7 @@ public class MigrationEngine {
         return new Migrator(session);
     }
 
-    public static class Migrator{
+    public static class Migrator {
         private final Session session;
         private final CassandraVersioner versioner;
 
@@ -32,12 +32,12 @@ public class MigrationEngine {
         }
 
         /**
-         * Method that executes all migration from migration resources that are higher version than db version. If migration
-         * fails, method will exit.
-         *
+         * Method that executes all migration from migration resources that are higher version than db version. If
+         * migration fails, method will exit.
+         * 
          * @return Success of migration
          */
-        public boolean migrate(final MigrationResources resources){
+        public boolean migrate(final MigrationResources resources) {
             LOGGER.debug("Start migration");
 
             for (final Migration migration : resources.getMigrations()) {
@@ -49,12 +49,12 @@ public class MigrationEngine {
                 LOGGER.info("Compare {} migration version {} with description {}", type.name(), migrationVersion,
                         migration.getDescription());
 
-                // If version is same or older dont execute
                 if (migrationVersion <= version) {
+                    LOGGER.warn("Skipping migration [{}] with version {} since db is on higher version {}.",
+                            migration.getDescription(), migrationVersion, version);
                     continue;
                 }
 
-                // Inject session
                 migration.setSession(session);
 
                 final long start = System.currentTimeMillis();
@@ -63,17 +63,17 @@ public class MigrationEngine {
                 try {
                     migration.execute();
                 } catch (final MigrationException e) {
-                    LOGGER.error("Failed to execute migration version {}!", migrationVersion);
-                    LOGGER.error(e.getMessage(), e);
+                    LOGGER.error("Failed to execute migration version {}, exception {}!", migrationVersion,
+                            e.getMessage());
+                    LOGGER.debug("Exception stack trace: {}", e);
                     return false;
                 }
 
                 final long end = System.currentTimeMillis();
                 final long seconds = (end - start) / 1000;
-                LOGGER.info("Migration to version {} finished in {} seconds.", migrationVersion, seconds);
-                LOGGER.info("Migration description: {}", migration.getDescription());
+                LOGGER.info("Migration [{}] to version {} finished in {} seconds.", migration.getDescription(),
+                        migrationVersion, seconds);
 
-                // After successful migration update db schema version
                 if (!versioner.updateVersion(migration)) {
                     LOGGER.error("Db schema update failed for migration version {}!", migrationVersion);
                     return false;

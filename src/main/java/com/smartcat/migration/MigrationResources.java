@@ -1,16 +1,14 @@
 package com.smartcat.migration;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class MigrationResources {
 
-    private final List<Migration> migrations = new ArrayList<>();
+    private final Set<Migration> migrations = new LinkedHashSet<>();
 
     /**
-     * Add Migration object to migration list
+     * Add Migration object to migration collection
      * 
      * @param migration Migration object
      */
@@ -19,39 +17,33 @@ public class MigrationResources {
     }
 
     /**
-     * Add Migration object list to migration list
+     * Add Migration object collection to migration collection (set is used as internal collection so no duplicates will
+     * be added and order will be preserved meaning that if migration was in collection on position it will stay on that
+     * position)
      * 
      * @param migrations Migration object list
      */
-    public void addMigrations(final List<Migration> migrations) {
+    public void addMigrations(final Set<Migration> migrations) {
         this.migrations.addAll(migrations);
     }
 
     /**
-     * Get all Migration objects sorted by migration version
+     * Get all Migration objects sorted by order of insert
      * 
      * @return Sorted list of Migration objects
      */
-    public List<Migration> getMigrations() {
-        // Sort migrations by migration version
-        Collections.sort(this.migrations, this.comparator);
+    public Set<Migration> getMigrations() {
         return this.migrations;
     }
 
-    // Migration comparator implementation for sorting migrations by version
-    private final Comparator<Migration> comparator = new Comparator<Migration>() {
-
-        @Override
-        public int compare(final Migration m1, final Migration m2) {
-            final int version1 = m1.getVersion();
-            final int version2 = m2.getVersion();
-
-            if (version1 == version2) {
-                throw new IllegalStateException("Migrations cannot have same version");
-            }
-
-            return m1.getVersion() - m2.getVersion();
-        }
-
-    };
+    /**
+     * Get migration on particular position (position of inserting)
+     * 
+     * @param position of migration in collection
+     * 
+     * @return Migration
+     */
+    public Migration getMigration(final int position) {
+        return (Migration) this.migrations.toArray()[position];
+    }
 }

@@ -3,8 +3,7 @@ package com.smartcat.migration;
 import com.datastax.driver.core.Session;
 
 /**
- * Abstract migration class that implements session DI and exposes required methods for execution. Migrations are sorted
- * ascending by version and executed in the same manner.
+ * Abstract migration class that implements session DI and exposes required methods for execution
  */
 public abstract class Migration {
 
@@ -51,11 +50,36 @@ public abstract class Migration {
      */
     public abstract String getDescription();
 
-    /**
+	/**
      * Executes migration implementation
      * 
      * @throws MigrationException
      */
     public abstract void execute() throws MigrationException;
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((type == null) ? 0 : type.hashCode());
+        result = prime * result + version;
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Migration other = (Migration) obj;
+        if (type != other.type)
+            return false;
+        if (version != other.version)
+            return false;
+        return true;
+    }
 
 }

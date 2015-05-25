@@ -1,3 +1,6 @@
+## Common
+*~
+
 ## Csharp
 **/bin
 **/obj
@@ -10,6 +13,7 @@
 *.settings
 *.classpath
 *.project
+target/
 
 ## Scala
 **/.idea

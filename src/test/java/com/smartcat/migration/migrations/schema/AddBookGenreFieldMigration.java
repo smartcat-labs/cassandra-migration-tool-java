@@ -5,6 +5,9 @@ import com.smartcat.migration.Migration;
 import com.smartcat.migration.MigrationException;
 import com.smartcat.migration.MigrationType;
 
+/**
+ * Example of schema migration which adds new column to existing table.
+ */
 public class AddBookGenreFieldMigration extends Migration {
 
     public AddBookGenreFieldMigration(final MigrationType type, final int version) {

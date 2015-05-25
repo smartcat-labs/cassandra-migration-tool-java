@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Reduce amount of logging -->
+    <logger name="org.apache.cassandra" level="WARN" />
+    <logger name="org.datastax" level="WARN" />
+
+</configuration>

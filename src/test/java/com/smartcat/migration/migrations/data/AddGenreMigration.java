@@ -10,6 +10,10 @@ import com.smartcat.migration.Migration;
 import com.smartcat.migration.MigrationException;
 import com.smartcat.migration.MigrationType;
 
+/**
+ * Example of data migration which will go through all entries in DB and for each add genre. Real life example which
+ * covers this case is adding of new column to DB and need to populate it with some data for already existing entries
+ */
 public class AddGenreMigration extends Migration {
     public AddGenreMigration(final MigrationType type, final int version) {
         super(type, version);
