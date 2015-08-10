@@ -1,11 +1,13 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
     <groupId>com.smartcat</groupId>
     <artifactId>cassandra-migration-tool</artifactId>
-    <version>2.1.5</version>
+    <version>0.0.1-beta</version>
     <name>cassandra-migration-tool</name>
     <description>Cassandra schema migration tool</description>
+    <url>https://github.com/smartcat-labs/cassandra-migration-tool-java</url>
 
     <properties>
         <cassandra-driver.version>2.1.5</cassandra-driver.version>
@@ -62,6 +64,29 @@
                     <target>1.7</target>
                 </configuration>
             </plugin>
-       </plugins>
-  </build>
+        </plugins>
+    </build>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:git@github.com:smartcat-labs/cassandra-migration-tool-java.git</connection>
+        <developerConnection>scm:git:git@github.com:smartcat-labs/cassandra-migration-tool-java.git</developerConnection>
+        <url>https://github.com/smartcat-labs/cassandra-migration-tool-java</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Various</name>
+            <organization>SmartCat</organization>
+        </developer>
+    </developers>
+
 </project>
