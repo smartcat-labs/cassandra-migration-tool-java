@@ -1,9 +1,10 @@
-package com.smartcat.migration.migrations.data;
+package io.smartcat.migration.migrations.data;
 
 import com.datastax.driver.core.PreparedStatement;
-import com.smartcat.migration.Migration;
-import com.smartcat.migration.MigrationException;
-import com.smartcat.migration.MigrationType;
+
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationException;
+import io.smartcat.migration.MigrationType;
 
 /**
  * Example of data migration used for populating data in table. This shows use case when you need to populate data in

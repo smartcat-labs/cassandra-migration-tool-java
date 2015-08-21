@@ -1,4 +1,4 @@
-package com.smartcat.migration.migrations.data;
+package io.smartcat.migration.migrations.data;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -6,9 +6,10 @@ import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.smartcat.migration.Migration;
-import com.smartcat.migration.MigrationException;
-import com.smartcat.migration.MigrationType;
+
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationException;
+import io.smartcat.migration.MigrationType;
 
 /**
  * Example of data migration which will go through all entries in DB and for each add genre. Real life example which
