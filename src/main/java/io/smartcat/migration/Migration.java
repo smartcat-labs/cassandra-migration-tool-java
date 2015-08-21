@@ -1,4 +1,4 @@
-package com.smartcat.migration;
+package io.smartcat.migration;
 
 import com.datastax.driver.core.Session;
 

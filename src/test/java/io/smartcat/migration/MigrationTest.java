@@ -1,9 +1,12 @@
-package com.smartcat.migration;
+package io.smartcat.migration;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationType;
 
 public class MigrationTest {
 

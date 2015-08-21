@@ -1,9 +1,10 @@
-package com.smartcat.migration.migrations.schema;
+package io.smartcat.migration.migrations.schema;
 
 import com.datastax.driver.core.SimpleStatement;
-import com.smartcat.migration.Migration;
-import com.smartcat.migration.MigrationException;
-import com.smartcat.migration.MigrationType;
+
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationException;
+import io.smartcat.migration.MigrationType;
 
 /**
  * Example of schema migration which adds new column to existing table.

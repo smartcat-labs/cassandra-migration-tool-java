@@ -1,4 +1,4 @@
-package com.smartcat.migration;
+package io.smartcat.migration;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -17,9 +17,13 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
-import com.smartcat.migration.migrations.data.AddGenreMigration;
-import com.smartcat.migration.migrations.data.InsertBooksMigration;
-import com.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
+
+import io.smartcat.migration.MigrationEngine;
+import io.smartcat.migration.MigrationResources;
+import io.smartcat.migration.MigrationType;
+import io.smartcat.migration.migrations.data.AddGenreMigration;
+import io.smartcat.migration.migrations.data.InsertBooksMigration;
+import io.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
 
 public class MigrationEngineTest {
 

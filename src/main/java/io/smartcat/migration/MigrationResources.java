@@ -1,4 +1,4 @@
-package com.smartcat.migration;
+package io.smartcat.migration;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
