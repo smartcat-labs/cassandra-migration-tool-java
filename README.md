@@ -12,4 +12,4 @@ Table is plane and simple (can be found in [init db.cql file](https://github.com
 3. Populate `genre` column with second `data` migration [AddGenreMigration](https://github.com/smartcat-labs/cassandra-migration-tool-java/blob/master/src/test/java/com/smartcat/migration/migrations/data/AddGenreMigration.java)
 
 # Future work
-1. Add possible to assign listener which will get notified when schema is in agreement (this [fix](https://datastax-oss.atlassian.net/browse/JAVA-669) it possible )
+1. Add possible to assign listener which will get notified when schema is in agreement (this [fix](https://datastax-oss.atlassian.net/browse/JAVA-669) makes it possible )
