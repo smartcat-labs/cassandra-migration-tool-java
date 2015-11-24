@@ -1,4 +1,5 @@
 # cassandra-migration-tool-java
+[![Build Status](https://travis-ci.org/smartcat-labs/cassandra-migration-tool-java.svg?branch=develop)](https://travis-ci.org/smartcat-labs/cassandra-migration-tool-java)
 
 Cassandra migration tool for java is a small tool used to execute schema and data migration on cassandra cluster. Schema versioning state is saved in `schema_version` table which stores name and description of migration along with type and timestamp. There are two possible types, SCHEMA migrations which alter database schema (add column, change type of column, add table) and DATA migrations which work on data (change, read from one table to another, calculate new field based on couple existing).
 
