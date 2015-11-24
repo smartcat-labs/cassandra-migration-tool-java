@@ -7,17 +7,16 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
-import io.smartcat.migration.Migration;
+import io.smartcat.migration.DataMigration;
 import io.smartcat.migration.MigrationException;
-import io.smartcat.migration.MigrationType;
 
 /**
  * Example of data migration which will go through all entries in DB and for each add genre. Real life example which
  * covers this case is adding of new column to DB and need to populate it with some data for already existing entries
  */
-public class AddGenreMigration extends Migration {
-    public AddGenreMigration(final MigrationType type, final int version) {
-        super(type, version);
+public class AddGenreMigration extends DataMigration {
+    public AddGenreMigration(final int version) {
+        super(version);
     }
 
     @Override
@@ -38,8 +37,8 @@ public class AddGenreMigration extends Migration {
         final Statement select = QueryBuilder.select().all().from("books");
         final ResultSet results = this.session.execute(select);
 
-        final PreparedStatement updateBookGenreStatement = session
-                .prepare("UPDATE books SET genre = ? WHERE name = ? AND author = ?;");
+        final PreparedStatement updateBookGenreStatement =
+                session.prepare("UPDATE books SET genre = ? WHERE name = ? AND author = ?;");
 
         for (final Row row : results) {
             final String name = row.getString("name");
@@ -49,7 +48,7 @@ public class AddGenreMigration extends Migration {
 
             if (name.equals("Journey to the Center of the Earth")) {
                 update = updateBookGenreStatement.bind("fantasy", name, author);
-            } else if (name.equals("Journey to the Center of the Earth")) {
+            } else if (name.equals("Fifty Shades of Grey")) {
                 update = updateBookGenreStatement.bind("erotica", name, author);
             } else {
                 update = updateBookGenreStatement.bind("programming", name, author);
