@@ -8,12 +8,21 @@ public class MigrationResources {
     private final Set<Migration> migrations = new LinkedHashSet<>();
 
     /**
-     * Add Migration object to migration collection
+     * Add data migration to migration collection
      * 
-     * @param migration Migration object
+     * @param migration DataMigration implementation
      */
-    public void addMigration(final Migration migration) {
+    public <T extends DataMigration> void addMigration(final T migration) {
         this.migrations.add(migration);
+    }
+    
+    /**
+     * Add schema migration to migration collection
+     * 
+     * @param migration SchemaMigration implementation
+     */
+    public <T extends SchemaMigration> void addMigration(final T migration) {
+    	this.migrations.add(migration);
     }
 
     /**

@@ -13,11 +13,11 @@ public class MigrationResourcesTest {
     @Test
     public void initialization_test() {
         final MigrationResources resources = new MigrationResources();
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 1));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 2));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 3));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 4));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 5));
+        resources.addMigration(new SchemaMigrationTestImplementation(1));
+        resources.addMigration(new SchemaMigrationTestImplementation(2));
+        resources.addMigration(new SchemaMigrationTestImplementation(3));
+        resources.addMigration(new SchemaMigrationTestImplementation(4));
+        resources.addMigration(new SchemaMigrationTestImplementation(5));
 
         assertEquals(5, resources.getMigrations().size());
         assertEquals(3, resources.getMigration(2).getVersion());
@@ -26,12 +26,12 @@ public class MigrationResourcesTest {
     @Test
     public void mixed_types_test() {
         final MigrationResources resources = new MigrationResources();
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 1));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 2));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 3));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.DATA, 1));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.DATA, 2));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.DATA, 3));
+        resources.addMigration(new SchemaMigrationTestImplementation(1));
+        resources.addMigration(new SchemaMigrationTestImplementation(2));
+        resources.addMigration(new SchemaMigrationTestImplementation(3));
+        resources.addMigration(new DataMigrationTestImplementation(1));
+        resources.addMigration(new DataMigrationTestImplementation(2));
+        resources.addMigration(new DataMigrationTestImplementation(3));
 
         resources.getMigrations();
         assertEquals(6, resources.getMigrations().size());
@@ -44,11 +44,11 @@ public class MigrationResourcesTest {
     @Test
     public void test_inserting_same_migration_ignored() {
         final MigrationResources resources = new MigrationResources();
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 1));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 2));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 3));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 5));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 3));
+        resources.addMigration(new SchemaMigrationTestImplementation(1));
+        resources.addMigration(new SchemaMigrationTestImplementation(2));
+        resources.addMigration(new SchemaMigrationTestImplementation(3));
+        resources.addMigration(new SchemaMigrationTestImplementation(5));
+        resources.addMigration(new SchemaMigrationTestImplementation(3));
 
         assertEquals(4, resources.getMigrations().size());
         assertEquals(1, resources.getMigration(0).getVersion());
@@ -60,14 +60,14 @@ public class MigrationResourcesTest {
     @Test
     public void mixed_inserts_order() {
         final MigrationResources resources = new MigrationResources();
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 1));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 3));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 5));
+        resources.addMigration(new SchemaMigrationTestImplementation(1));
+        resources.addMigration(new SchemaMigrationTestImplementation(3));
+        resources.addMigration(new SchemaMigrationTestImplementation(5));
 
         assertEquals(3, resources.getMigrations().size());
 
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 2));
-        resources.addMigration(new MigrationTestImplementation(MigrationType.SCHEMA, 4));
+        resources.addMigration(new SchemaMigrationTestImplementation(2));
+        resources.addMigration(new SchemaMigrationTestImplementation(4));
 
         assertEquals(5, resources.getMigrations().size());
         assertEquals(1, resources.getMigration(0).getVersion());
@@ -77,10 +77,27 @@ public class MigrationResourcesTest {
         assertEquals(4, resources.getMigration(4).getVersion());
     }
 
-    public class MigrationTestImplementation extends Migration {
+    public class SchemaMigrationTestImplementation extends SchemaMigration {
 
-        protected MigrationTestImplementation(final MigrationType type, final int version) {
-            super(type, version);
+		public SchemaMigrationTestImplementation(final int version) {
+			super(version);
+		}
+    	
+		@Override
+        public String getDescription() {
+            return "Test description";
+        }
+
+        @Override
+        public void execute() {
+
+        }
+    }
+    
+    public class DataMigrationTestImplementation extends DataMigration {
+
+        protected DataMigrationTestImplementation(final int version) {
+            super(version);
         }
 
         @Override
@@ -92,7 +109,6 @@ public class MigrationResourcesTest {
         public void execute() {
 
         }
-
     }
 
 }
