@@ -2,6 +2,9 @@ package io.smartcat.migration;
 
 import static junit.framework.Assert.assertEquals;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -18,9 +21,6 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
-import io.smartcat.migration.MigrationEngine;
-import io.smartcat.migration.MigrationResources;
-import io.smartcat.migration.MigrationType;
 import io.smartcat.migration.migrations.data.AddGenreMigration;
 import io.smartcat.migration.migrations.data.InsertBooksMigration;
 import io.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
@@ -62,7 +62,7 @@ public class MigrationEngineTest {
     @Test
     public void test_schema_migration() {
         final MigrationResources resources = new MigrationResources();
-        resources.addMigration(new AddBookGenreFieldMigration(MigrationType.SCHEMA, 1));
+        resources.addMigration(new AddBookGenreFieldMigration(1));
         final boolean result = MigrationEngine.withSession(session).migrate(resources);
 
         assertEquals(true, result);
@@ -71,12 +71,12 @@ public class MigrationEngineTest {
     @Test
     public void test_data_migration() {
         final MigrationResources initialResources = new MigrationResources();
-        initialResources.addMigration(new InsertBooksMigration(MigrationType.DATA, 1));
+        initialResources.addMigration(new InsertBooksMigration(1));
         MigrationEngine.withSession(session).migrate(initialResources);
 
         final MigrationResources resources = new MigrationResources();
-        resources.addMigration(new AddBookGenreFieldMigration(MigrationType.SCHEMA, 1));
-        resources.addMigration(new AddGenreMigration(MigrationType.DATA, 2));
+        resources.addMigration(new AddBookGenreFieldMigration(1));
+        resources.addMigration(new AddGenreMigration(2));
         MigrationEngine.withSession(session).migrate(resources);
 
         final Statement select = QueryBuilder.select().all().from("books");
@@ -88,7 +88,7 @@ public class MigrationEngineTest {
 
             if (name.equals("Journey to the Center of the Earth")) {
                 assertEquals("fantasy", genre);
-            } else if (name.equals("Journey to the Center of the Earth")) {
+            } else if (name.equals("Fifty Shades of Grey")) {
                 assertEquals("erotica", genre);
             } else {
                 assertEquals("programming", genre);

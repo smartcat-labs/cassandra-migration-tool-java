@@ -2,18 +2,17 @@ package io.smartcat.migration.migrations.data;
 
 import com.datastax.driver.core.PreparedStatement;
 
-import io.smartcat.migration.Migration;
+import io.smartcat.migration.DataMigration;
 import io.smartcat.migration.MigrationException;
-import io.smartcat.migration.MigrationType;
 
 /**
  * Example of data migration used for populating data in table. This shows use case when you need to populate data in
  * table fast. Can be used for test data, logic can be added to add near production like data in huge amounts.
  */
-public class InsertBooksMigration extends Migration {
+public class InsertBooksMigration extends DataMigration {
 
-    public InsertBooksMigration(final MigrationType type, final int version) {
-        super(type, version);
+    public InsertBooksMigration(final int version) {
+        super(version);
     }
 
     @Override
@@ -24,8 +23,8 @@ public class InsertBooksMigration extends Migration {
     @Override
     public void execute() throws MigrationException {
         try {
-            final PreparedStatement preparedStatement = session
-                    .prepare("INSERT INTO books (name, author) VALUES (?, ? );");
+            final PreparedStatement preparedStatement =
+                    session.prepare("INSERT INTO books (name, author) VALUES (?, ? );");
 
             session.execute(preparedStatement.bind("Journey to the Center of the Earth", "Jules Verne"));
             session.execute(preparedStatement.bind("Fifty Shades of Grey", "E. L. James"));

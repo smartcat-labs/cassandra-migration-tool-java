@@ -2,17 +2,16 @@ package io.smartcat.migration.migrations.schema;
 
 import com.datastax.driver.core.SimpleStatement;
 
-import io.smartcat.migration.Migration;
 import io.smartcat.migration.MigrationException;
-import io.smartcat.migration.MigrationType;
+import io.smartcat.migration.SchemaMigration;
 
 /**
  * Example of schema migration which adds new column to existing table.
  */
-public class AddBookGenreFieldMigration extends Migration {
+public class AddBookGenreFieldMigration extends SchemaMigration {
 
-    public AddBookGenreFieldMigration(final MigrationType type, final int version) {
-        super(type, version);
+    public AddBookGenreFieldMigration(final int version) {
+        super(version);
     }
 
     @Override
