@@ -6,22 +6,13 @@ import java.util.Set;
 public class MigrationResources {
 
     private final Set<Migration> migrations = new LinkedHashSet<>();
-
-    /**
-     * Add data migration to migration collection
-     * 
-     * @param migration DataMigration implementation
-     */
-    public <T extends DataMigration> void addMigration(final T migration) {
-        this.migrations.add(migration);
-    }
     
     /**
-     * Add schema migration to migration collection
+     * Add migration to migration collection
      * 
-     * @param migration SchemaMigration implementation
+     * @param migration Migration implementation
      */
-    public <T extends SchemaMigration> void addMigration(final T migration) {
+    public <T extends Migration> void addMigration(final T migration) {
     	this.migrations.add(migration);
     }
 

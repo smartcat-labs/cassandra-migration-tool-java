@@ -17,3 +17,6 @@ target/
 
 ## Scala
 **/.idea
+
+## Intellij
+*.iml

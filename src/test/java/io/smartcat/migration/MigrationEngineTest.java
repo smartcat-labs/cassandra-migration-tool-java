@@ -2,9 +2,6 @@ package io.smartcat.migration;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
