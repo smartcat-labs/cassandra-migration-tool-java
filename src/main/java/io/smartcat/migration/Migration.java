@@ -1,6 +1,8 @@
 package io.smartcat.migration;
 
+import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 
 /**
  * Abstract migration class that implements session DI and exposes required methods for execution
@@ -56,6 +58,53 @@ public abstract class Migration {
      * @throws MigrationException
      */
     public abstract void execute() throws MigrationException;
+
+    protected void executeWithSchemaAgreement(Statement statement)
+            throws MigrationException
+    {
+        ResultSet result = this.session.execute(statement);
+        if (checkSchemaAgreement(result)) return;
+        if (checkClusterSchemaAgreement()) return;
+
+        throw new MigrationException(
+                "Failed to propagate schema update to all nodes (schema agreement error)");
+    }
+
+    /**
+     * Whether the cluster had reached schema agreement after the execution of this query.
+     * <p/>
+     * After a successful schema-altering query (ex: creating a table), the driver
+     * will check if the cluster's nodes agree on the new schema version. If not,
+     * it will keep retrying for a given delay (configurable via
+     * {@link Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}).
+     * <p/>
+     * If this method returns {@code false}, clients can call {@link Metadata#checkSchemaAgreement()}
+     * later to perform the check manually.
+     * <p/>
+     * Note that the schema agreement check is only performed for schema-altering queries
+     * For other query types, this method will always return {@code true}.
+     *
+     * @return whether the cluster reached schema agreement, or {@code true} for a non
+     * schema-altering statement.
+     */
+    protected boolean checkSchemaAgreement(ResultSet resultSet) {
+        return resultSet.getExecutionInfo().isSchemaInAgreement();
+    }
+
+    /**
+     * Checks whether hosts that are currently up agree on the schema definition.
+     * <p/>
+     * This method performs a one-time check only, without any form of retry; therefore
+     * {@link Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}
+     * does not apply in this case.
+     *
+     * @return {@code true} if all hosts agree on the schema; {@code false} if
+     * they don't agree, or if the check could not be performed
+     * (for example, if the control connection is down).
+     */
+    protected boolean checkClusterSchemaAgreement() {
+        return this.session.getCluster().getMetadata().checkSchemaAgreement();
+    }
 
     @Override
     public int hashCode() {

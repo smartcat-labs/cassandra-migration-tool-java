@@ -24,7 +24,7 @@ public class AddBookGenreFieldMigration extends SchemaMigration {
         try {
             final String alterBooksAddGenreCQL = "ALTER TABLE books ADD genre text;";
 
-            this.session.execute(new SimpleStatement(alterBooksAddGenreCQL));
+            executeWithSchemaAgreement(new SimpleStatement(alterBooksAddGenreCQL));
 
         } catch (final Exception e) {
             throw new MigrationException("Failed to execute AddBookGenreField migration", e);
