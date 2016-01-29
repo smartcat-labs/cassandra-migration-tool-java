@@ -21,7 +21,7 @@ public abstract class Migration {
     /**
      * Enables session injection into migration class
      * 
-     * @param session
+     * @param session Session object
      */
     public void setSession(final Session session) {
         this.session = session;
@@ -31,6 +31,7 @@ public abstract class Migration {
      * Returns migration type (schema or data)
      * 
      * @return Migration type
+     * @throws MigrationException exception
      */
     public MigrationType getType() {
         return this.type;
@@ -47,15 +48,13 @@ public abstract class Migration {
 
     /**
      * Returns migration description (for history purposes)
-     * 
-     * @return Migration description
      */
     public abstract String getDescription();
 
 	/**
      * Executes migration implementation
-     * 
-     * @throws MigrationException
+     *
+     * @throws MigrationException exception
      */
     public abstract void execute() throws MigrationException;
 
@@ -63,7 +62,7 @@ public abstract class Migration {
      * Execute provided statement and checks if the schema migration has been propagated
      * to all nodes in the cluster. Use this method when executing schema migrations.
      * @param statement Statement to be executed
-     * @throws MigrationException
+     * @throws MigrationException exception
      */
     protected void executeWithSchemaAgreement(Statement statement)
             throws MigrationException
@@ -78,15 +77,15 @@ public abstract class Migration {
 
     /**
      * Whether the cluster had reached schema agreement after the execution of this query.
-     * <p/>
+     *
      * After a successful schema-altering query (ex: creating a table), the driver
      * will check if the cluster's nodes agree on the new schema version. If not,
      * it will keep retrying for a given delay (configurable via
      * {@link com.datastax.driver.core.Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}).
-     * <p/>
+     *
      * If this method returns {@code false}, clients can call {@link com.datastax.driver.core.Metadata#checkSchemaAgreement()}
      * later to perform the check manually.
-     * <p/>
+     *
      * Note that the schema agreement check is only performed for schema-altering queries
      * For other query types, this method will always return {@code true}.
      *
@@ -100,7 +99,7 @@ public abstract class Migration {
 
     /**
      * Checks whether hosts that are currently up agree on the schema definition.
-     * <p/>
+     *
      * This method performs a one-time check only, without any form of retry; therefore
      * {@link com.datastax.driver.core.Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}
      * does not apply in this case.
