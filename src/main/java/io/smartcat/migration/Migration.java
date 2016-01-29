@@ -31,7 +31,6 @@ public abstract class Migration {
      * Returns migration type (schema or data)
      * 
      * @return Migration type
-     * @throws MigrationException exception
      */
     public MigrationType getType() {
         return this.type;
