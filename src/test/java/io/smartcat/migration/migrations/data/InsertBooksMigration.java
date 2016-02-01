@@ -3,7 +3,7 @@ package io.smartcat.migration.migrations.data;
 import com.datastax.driver.core.PreparedStatement;
 
 import io.smartcat.migration.DataMigration;
-import io.smartcat.migration.MigrationException;
+import io.smartcat.migration.exceptions.MigrationException;
 
 /**
  * Example of data migration used for populating data in table. This shows use case when you need to populate data in

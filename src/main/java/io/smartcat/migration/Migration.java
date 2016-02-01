@@ -3,6 +3,8 @@ package io.smartcat.migration;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
+import io.smartcat.migration.exceptions.MigrationException;
+import io.smartcat.migration.exceptions.SchemaAgreementException;
 
 /**
  * Abstract migration class that implements session DI and exposes required methods for execution
@@ -61,16 +63,20 @@ public abstract class Migration {
      * Execute provided statement and checks if the schema migration has been propagated
      * to all nodes in the cluster. Use this method when executing schema migrations.
      * @param statement Statement to be executed
-     * @throws MigrationException exception
+     * @throws SchemaAgreementException exception
      */
     protected void executeWithSchemaAgreement(Statement statement)
-            throws MigrationException
+            throws SchemaAgreementException
     {
         ResultSet result = this.session.execute(statement);
-        if (checkSchemaAgreement(result)) return;
-        if (checkClusterSchemaAgreement()) return;
+        if (checkSchemaAgreement(result)) {
+            return;
+        }
+        if (checkClusterSchemaAgreement()) {
+            return;
+        }
 
-        throw new MigrationException(
+        throw new SchemaAgreementException(
                 "Failed to propagate schema update to all nodes (schema agreement error)");
     }
 

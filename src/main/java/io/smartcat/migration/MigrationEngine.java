@@ -1,5 +1,6 @@
 package io.smartcat.migration;
 
+import io.smartcat.migration.exceptions.MigrationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

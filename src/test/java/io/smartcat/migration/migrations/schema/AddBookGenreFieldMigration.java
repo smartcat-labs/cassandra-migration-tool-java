@@ -2,7 +2,7 @@ package io.smartcat.migration.migrations.schema;
 
 import com.datastax.driver.core.SimpleStatement;
 
-import io.smartcat.migration.MigrationException;
+import io.smartcat.migration.exceptions.MigrationException;
 import io.smartcat.migration.SchemaMigration;
 
 /**
