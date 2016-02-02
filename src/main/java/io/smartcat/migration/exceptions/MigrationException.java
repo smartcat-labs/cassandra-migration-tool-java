@@ -1,4 +1,4 @@
-package io.smartcat.migration;
+package io.smartcat.migration.exceptions;
 
 public class MigrationException extends Exception {
 

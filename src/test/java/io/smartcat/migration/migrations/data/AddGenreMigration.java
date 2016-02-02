@@ -8,7 +8,7 @@ import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
 import io.smartcat.migration.DataMigration;
-import io.smartcat.migration.MigrationException;
+import io.smartcat.migration.exceptions.MigrationException;
 
 /**
  * Example of data migration which will go through all entries in DB and for each add genre. Real life example which

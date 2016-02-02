@@ -1,5 +1,6 @@
 package io.smartcat.migration;
 
+import io.smartcat.migration.exceptions.MigrationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +35,8 @@ public class MigrationEngine {
         /**
          * Method that executes all migration from migration resources that are higher version than db version. If
          * migration fails, method will exit.
-         * 
+         *
+         * @param resources Collection of migrations to be executed
          * @return Success of migration
          */
         public boolean migrate(final MigrationResources resources) {
