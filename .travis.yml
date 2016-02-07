@@ -3,5 +3,6 @@ sudo: false # faster builds
 
 jdk:
   - oraclejdk8
+  - openjdk8
 
 install: mvn install -Dgpg.skip=true
