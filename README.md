@@ -12,5 +12,5 @@ Table is plane and simple (can be found in [init db.cql file](src/test/resources
 2. Add `genre` column with `schema` migration [AddBookGenreFieldMigration](src/test/java/io/smartcat/migration/migrations/schema/AddBookGenreFieldMigration.java)
 3. Populate `genre` column with second `data` migration [AddGenreMigration](src/test/java/io/smartcat/migration/migrations/data/AddGenreMigration.java)
 
-# Future work
-1. Add possibility to assign listener which will get notified when schema is in agreement (this [fix](https://datastax-oss.atlassian.net/browse/JAVA-669) makes it possible )
+# Schema agreement
+When executing schema migrations it is necessary to wait for cluster to propagate schema on all nodes. Schema agreement is implemented based on this [fix](https://datastax-oss.atlassian.net/browse/JAVA-669) and is exposed through [Migration](src/main/java/io/smartcat/migration/Migration.java) abstract class.
