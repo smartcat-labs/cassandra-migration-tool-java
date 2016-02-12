@@ -1,7 +1,14 @@
 # cassandra-migration-tool-java
 [![Build Status](https://travis-ci.org/smartcat-labs/cassandra-migration-tool-java.svg?branch=develop)](https://travis-ci.org/smartcat-labs/cassandra-migration-tool-java)
 
-Cassandra migration tool for java is a small tool used to execute schema and data migration on cassandra cluster. Schema versioning state is saved in `schema_version` table which stores name and description of migration along with type and timestamp. There are two possible types, SCHEMA migrations which alter database schema (add column, change type of column, add table) and DATA migrations which work on data (change, read from one table to another, calculate new field based on couple existing).
+Cassandra migration tool for java is a lightweight tool used to execute schema and data migration on Cassandra database. Schema versioning state is saved in `schema_version` table which stores name and description of migration along with type and timestamp. There are two types of migrations:
+1. SCHEMA migrations, which alter database schema (add or remove column, change type of column, add table, etc)
+2. DATA migrations, which alter data (update, read from one table to another, calculate new fields based on existing data, etc).
+
+# Why we did it
+
+The idea behind this project was born while working on a project with live data. Since the development required changes to the data model we had to figure out a way we can update the database schema while keeping the data. We ended up with a lightweight tool that versions database and enables us to change schema and transform data when and how we want (as a part of a build and deploy cycle or application itself). Since these changes are part of the codebase we could also test them before executing on a live cluster.
+
 
 # Versioning
 
@@ -17,9 +24,9 @@ This means that if you are using the driver version 2.1.9 you can add this depen
 or whatever the latest build version of the migration tool is. Check the version at the [Maven repository](http://mvnrepository.com/artifact/io.smartcat/cassandra-migration-tool).
 
 # Examples
-In tests [MigrationEngineTest](src/test/java/io/smartcat/migration/MigrationEngineTest.java) can serve as  example of one use case which this tool can cover. There is already defined table in cassandra DB with production data in it and requirement is to add column and populate it.
+In tests [MigrationEngineTest](src/test/java/io/smartcat/migration/MigrationEngineTest.java) can serve as an example of one use case which this tool can cover. There is already defined table in cassandra DB with production data in it and requirement is to add column and populate it with data.
 
-The initial table is simple (can be found in [init db.cql file](src/test/resources/db.cql)) and we use migration classes to do following:
+The initial table is simple (can be found in [init db.cql file](src/test/resources/db.cql)) and we use migration classes to do the following:
 
 1. Populate data initially with first `data` migration [InsertBooksMigration](src/test/java/io/smartcat/migration/migrations/data/InsertBooksMigration.java)
 2. Add `genre` column with `schema` migration [AddBookGenreFieldMigration](src/test/java/io/smartcat/migration/migrations/schema/AddBookGenreFieldMigration.java)
