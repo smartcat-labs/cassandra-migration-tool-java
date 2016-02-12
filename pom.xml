@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.smartcat</groupId>
     <artifactId>cassandra-migration-tool</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>2.1.9.0</version>
     <packaging>jar</packaging>
     <name>cassandra-migration-tool</name>
     <description>Cassandra schema migration tool</description>
