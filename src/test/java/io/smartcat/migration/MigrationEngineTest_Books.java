@@ -2,9 +2,6 @@ package io.smartcat.migration;
 
 import static junit.framework.Assert.assertEquals;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
 import org.cassandraunit.utils.EmbeddedCassandraServerHelper;
@@ -25,14 +22,14 @@ import io.smartcat.migration.migrations.data.AddGenreMigration;
 import io.smartcat.migration.migrations.data.InsertBooksMigration;
 import io.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
 
-public class MigrationEngineTest {
+public class MigrationEngineTest_Books {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngineTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngineTest_Books.class);
 
     private static final String CONTACT_POINT = "localhost";
     private static final int PORT = 9142;
-    private static final String KEYSPACE = "migration_test";
-    private static final String CQL = "db.cql";
+    private static final String KEYSPACE = "migration_test_books";
+    private static final String CQL = "books.cql";
 
     private static Session session;
     private static Cluster cluster;
