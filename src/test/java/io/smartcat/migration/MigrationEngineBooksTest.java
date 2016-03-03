@@ -22,9 +22,9 @@ import io.smartcat.migration.migrations.data.AddGenreMigration;
 import io.smartcat.migration.migrations.data.InsertBooksMigration;
 import io.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
 
-public class MigrationEngineTest_Books {
+public class MigrationEngineBooksTest extends BaseTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngineTest_Books.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngineBooksTest.class);
 
     private static final String CONTACT_POINT = "localhost";
     private static final int PORT = 9142;
