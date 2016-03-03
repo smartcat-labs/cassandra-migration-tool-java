@@ -4,9 +4,6 @@ import com.datastax.driver.core.SimpleStatement;
 import io.smartcat.migration.SchemaMigration;
 import io.smartcat.migration.exceptions.MigrationException;
 
-/**
- * Created by matija on 3/3/16.
- */
 public class CreateItemByNumberAndExternalIdMigration extends SchemaMigration {
 
     public CreateItemByNumberAndExternalIdMigration(final int version) {
@@ -27,7 +24,7 @@ public class CreateItemByNumberAndExternalIdMigration extends SchemaMigration {
                             "number text," +
                             "external_id uuid," +
                             "PRIMARY KEY ((number, external_id))" +
-                    ") WITH COMMENT='Items by item ID';";
+                    ") WITH COMMENT='Items by item number and external id';";
             executeWithSchemaAgreement(new SimpleStatement(statement));
 
         } catch (final Exception e) {

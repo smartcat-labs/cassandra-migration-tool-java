@@ -25,7 +25,7 @@ public class PopulateItemByNumberAndExternalIdMigration extends DataMigration {
             final PreparedStatement preparedStatement =
                     session.prepare("INSERT INTO items_by_number_external_id (id, number, external_id) VALUES (?, ?, ?);");
 
-            final List<Row> rows = session.execute(QueryBuilder.select().from("items_by_id")).all();
+            final List<Row> rows = session.execute(QueryBuilder.select().from("items_by_id").setFetchSize(1000)).all();
             for (Row row : rows) {
                 session.execute(preparedStatement.bind(row.getUUID("id"), row.getString("number"), row.getUUID("external_id")));
             }
