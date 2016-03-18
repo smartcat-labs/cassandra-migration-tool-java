@@ -29,7 +29,7 @@ or whatever the latest build version of the migration tool is. Check the version
 # Examples
 We have two test cases which explain common problems which migration tool can solve. This is only subset of use cases but we think these are most frequent once:
 
-**First use case** touches problem of adding new field and populating historic data with value. Cassandra does not have DDL `default attribute`, so you must populate data on application level. [MigrationEngineBooksTest](src/test/java/io/smartcat/migration/MigrationEngineBooksTest.java) can serve as an example of that use case which this tool can cover.
+**First use case** touches problem of adding new field and populating historic data with value. Cassandra does not have DDL `default` attribute, so you must populate data on application level. [MigrationEngineBooksTest](src/test/java/io/smartcat/migration/MigrationEngineBooksTest.java) can serve as an example of that use case which this tool can cover.
 
 The initial table is simple (can be found in [books.cql file](src/test/resources/books.cql)) and we use migration classes to do the following:
 
