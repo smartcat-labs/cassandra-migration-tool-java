@@ -29,7 +29,7 @@ or whatever the latest build version of the migration tool is. Check the version
 # Examples
 We have two test cases which explain common problems which migration tool can solve. This is only subset of use cases but we think these are most frequent once:
 
-*First use case* touches problem of adding new field and populating historic data with value. Cassandra does not have DDL default attribute, so you must populate data on application level. [MigrationEngineBooksTest](src/test/java/io/smartcat/migration/MigrationEngineBooksTest.java) can serve as an example of that use case which this tool can cover.
+**First use case** touches problem of adding new field and populating historic data with value. Cassandra does not have DDL `default attribute`, so you must populate data on application level. [MigrationEngineBooksTest](src/test/java/io/smartcat/migration/MigrationEngineBooksTest.java) can serve as an example of that use case which this tool can cover.
 
 The initial table is simple (can be found in [books.cql file](src/test/resources/books.cql)) and we use migration classes to do the following:
 
@@ -37,7 +37,7 @@ The initial table is simple (can be found in [books.cql file](src/test/resources
 2. Add `genre` column with `schema` migration [AddBookGenreFieldMigration](src/test/java/io/smartcat/migration/migrations/schema/AddBookGenreFieldMigration.java)
 3. Populate `genre` column with second `data` migration [AddGenreMigration](src/test/java/io/smartcat/migration/migrations/data/AddGenreMigration.java)
 
-*Second use case* touches problem of query based modeling. Cassandra has good performance because you model your data as you will query it. Often after initial modeling you have request to read it based on different criteria. In Cassandra you do this with another table which is optimized for new requirements. You need to populate this new table with existing data and you can solve this with migration tool. [MigrationEngineItemsTest](src/test/java/io/smartcat/migration/MigrationEngineItemsTest.java) can serve as an example of that use case which this tool can cover.
+**Second use case** touches problem of query based modeling. Cassandra has good performance because you model your data as you will query it. Often after initial modeling you have request to read it based on different criteria. In Cassandra you do this with another table which is optimized for new requirements. You need to populate this new table with existing data and you can solve this with migration tool. [MigrationEngineItemsTest](src/test/java/io/smartcat/migration/MigrationEngineItemsTest.java) can serve as an example of that use case which this tool can cover.
 
 The initial table is simple (can be found in [items.cql file](src/test/resources/items.cql)) and we use migration classes to do the following:
 
