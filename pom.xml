@@ -15,6 +15,7 @@
         <cassandra-unit.version>2.1.9.2</cassandra-unit.version>
         <guava.version>16.0.1</guava.version>
         <slf4j.version>1.7.7</slf4j.version>
+        <slf4j-test.version>1.2.0</slf4j-test.version>
         <junit.version>4.9</junit.version>
     </properties>
 
@@ -47,6 +48,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
+		<dependency>
+			<groupId>uk.org.lidalia</groupId>
+			<artifactId>slf4j-test</artifactId>
+			<version>${slf4j-test.version}</version>
+			<scope>test</scope>
+		</dependency>
     </dependencies>
 
     <distributionManagement>
