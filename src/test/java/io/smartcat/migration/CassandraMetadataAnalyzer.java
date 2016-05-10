@@ -14,14 +14,14 @@ public class CassandraMetadataAnalyzer {
 
     private Session session;
 
-    public CassandraMetadataAnalyzer(Session aSession) {
-        checkNotNull(aSession, "Session cannot be null");
-        checkNotNull(aSession.getLoggedKeyspace(), "Session must be logged into a keyspace");
-        session = aSession;
+    public CassandraMetadataAnalyzer(Session session) {
+        checkNotNull(session, "Session cannot be null");
+        checkNotNull(session.getLoggedKeyspace(), "Session must be logged into a keyspace");
+        this.session = session;
     }
 
     public boolean columnExistInTable(String columnName, String tableName) {
-        TableMetadata table = getTableMetadata(session, tableName);
+        TableMetadata table = getTableMetadata(this.session, tableName);
         Optional<ColumnMetadata> column = tryFind(table.getColumns(), new ColumnNameMatcher(columnName));
         return column.isPresent();
     }
