@@ -1,7 +1,8 @@
 language: java
-sudo: false # faster builds
-
+sudo: false
 jdk:
-  - oraclejdk8
-
+- oraclejdk8
 install: mvn install -Dgpg.skip=true
+notifications:
+  slack:
+    secure: Uqth2gatGYTEOTdqAkZJD4ErqZmLXp+dMrFV8QVvm04F5iG6y1mDLJF5ZnvqQWMX0kr6xi77V/ZWE/HUoHFVl+IzzN1VJlNNcpEG74O6FWlhzCWw1ivPbOpUYRouQit2QZPrqq4MGNy5omr22df91ESwe9Ow6es45lhIQ1NNYvtgBccDj3MS2tD1PW4OTnjNiRMjBIEkcoIq0XNHxyE5g19LYo5XY+E0cYFL1LHG5L9sAcyX5GKxaQC7jyCRcEBVPq/Tv/YiHv0uv4cQBE96qQdHfJHhzUCbKDX6dQ+sn9QY+Pw+ztM2Pt51GfnnnBCHoWbHgfXa1CGfs+OwrO+MrVIa9ZUyQCYuI4qe0vtSsVAeA6w8PfMA9YVe0GSRV6KbZHY1cCfjAG4x3w5yETRak381Cnf4DieehuFmz5UMWAZi5BcBHIQu0gNEyqPpNrkewozebOcLNfkzOJBhi3MdtS92gs2cxGDH2j7ivT77cTDpmgYwiM3yxvmYPZXCYpSFOeC6Z/AC56tR8eUA/kAQTRMG6F3YoDoTQ8K25QBmHWNoC9lt30IIDyI5bHXkiPBwAlRxW+Rk+KWM5wWIz6c/UfMcixzJn7prAlZwcnerGao6TerNpaOc6zcEUO+t5U8HUk5vL4GzAOICBjLzgEuVNEisVOUAi1eBo8heJTyDonw=
