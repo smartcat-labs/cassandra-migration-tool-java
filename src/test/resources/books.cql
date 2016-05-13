@@ -3,8 +3,8 @@
   Also using lightweight transaction (ifNotExists) does not seem to work together with SimpleStrategy and
   consistency level EACH_QUORUM.
  */
-CREATE KEYSPACE migration_test WITH replication = { 'class': 'NetworkTopologyStrategy', 'DC1': '1' };
-USE migration_test;
+CREATE KEYSPACE migration_test_books WITH replication = { 'class': 'NetworkTopologyStrategy', 'DC1': '1' };
+USE migration_test_books;
 
 /* Books */ 
 CREATE TABLE books (

@@ -1,5 +1,6 @@
 language: java
-sudo: false
+sudo: true
+
 jdk:
 - oraclejdk8
 install: mvn install -Dgpg.skip=true
