@@ -20,26 +20,28 @@
     </properties>
 
     <dependencies>
+        <!-- The assumption is that consuming applications will have already -->
+        <!-- declared these dependencies.  If not the consuming application  -->
+        <!-- will just need to declare these dependencies.                   -->
         <dependency>
             <groupId>com.datastax.cassandra</groupId>
             <artifactId>cassandra-driver-core</artifactId>
             <version>${cassandra-driver.version}</version>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4j.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <optional>true</optional>
         </dependency>
 
+        <!-- Test Framework Dependencies -->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.cassandraunit</groupId>
