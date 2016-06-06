@@ -83,6 +83,9 @@
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
+                    <forkCount>3</forkCount>
+                    <reuseForks>true</reuseForks>
+                    <argLine>-Xmx1024m -XX:MaxPermSize=256m</argLine>
                 </configuration>
             </plugin>
             <plugin>
