@@ -1,4 +1,4 @@
-# Cassandra storage config YAML 
+# Cassandra storage config YAML
 
 # NOTE:
 #   See http://wiki.apache.org/cassandra/StorageConfiguration for
@@ -50,7 +50,7 @@ authorizer: org.apache.cassandra.auth.AllowAllAuthorizer
 # org.apache.cassandra.dht.OrderPreservingPartitioner (deprecated),
 # and org.apache.cassandra.dht.CollatingOrderPreservingPartitioner
 # (deprecated).
-# 
+#
 # - RandomPartitioner distributes rows across the cluster evenly by md5.
 #   When in doubt, this is the best option.
 # - ByteOrderedPartitioner orders rows lexically by key bytes.  BOP allows
@@ -126,7 +126,7 @@ row_cache_save_period: 0
 # saved caches
 saved_caches_directory: target/embeddedCassandra/saved_caches
 
-# commitlog_sync may be either "periodic" or "batch." 
+# commitlog_sync may be either "periodic" or "batch."
 # When in batch mode, Cassandra won't ack writes until the commit log
 # has been fsynced to disk.  It will wait up to
 # commitlog_sync_batch_window_in_ms milliseconds for other writes, before
@@ -144,7 +144,7 @@ commitlog_sync_period_in_ms: 10000
 # any class that implements the SeedProvider interface and has a
 # constructor that takes a Map<String, String> of parameters will do.
 seed_provider:
-    # Addresses of hosts that are deemed contact points. 
+    # Addresses of hosts that are deemed contact points.
     # Cassandra nodes use this list of hosts to find each other and learn
     # the topology of the ring.  You must change this if you are running
     # multiple nodes!
@@ -171,7 +171,7 @@ concurrent_writes: 32
 # If omitted, Cassandra will set it to 1/3 of the heap.
 # memtable_total_space_in_mb: 2048
 
-# Total space to use for commitlogs. 
+# Total space to use for commitlogs.
 # If space gets above this value (it will round up to the next nearest
 # segment multiple), Cassandra will flush every dirty CF in the oldest
 # segment and remove it.
@@ -207,7 +207,7 @@ ssl_storage_port: 7011
 # Address to bind to and tell other Cassandra nodes to connect to. You
 # _must_ change this if you want multiple nodes to be able to
 # communicate!
-# 
+#
 # Leaving it blank leaves it up to InetAddress.getLocalHost(). This
 # will always do the Right Thing *if* the node is properly configured
 # (hostname, name resolution, etc), and the Right Thing is to use the
@@ -223,7 +223,7 @@ listen_address: 127.0.0.1
 # The address to bind the Thrift RPC service to -- clients connect
 # here. Unlike ListenAddress above, you *can* specify 0.0.0.0 here if
 # you want Thrift to listen on all interfaces.
-# 
+#
 # Leaving this blank has the same effect it does for ListenAddress,
 # (i.e. it will be based on the configured hostname of the node).
 rpc_address: localhost
@@ -244,12 +244,12 @@ rpc_keepalive: true
 #          factor; on a 64 bit JVM, 128KB is the minimum stack size per thread.
 #          Connection pooling is very, very strongly recommended.
 #
-# async -> Nonblocking server implementation with one thread to serve 
+# async -> Nonblocking server implementation with one thread to serve
 #          rpc connections.  This is not recommended for high throughput use
 #          cases. Async has been tested to be about 50% slower than sync
 #          or hsha and is deprecated: it will be removed in the next major release.
 #
-# hsha  -> Stands for "half synchronous, half asynchronous." The rpc thread pool 
+# hsha  -> Stands for "half synchronous, half asynchronous." The rpc thread pool
 #          (see below) is used to manage requests, but the threads are multiplexed
 #          across the different clients.
 #
@@ -262,7 +262,7 @@ rpc_server_type: sync
 # misbehaved clients; if you do hit the max, Cassandra will block until one
 # disconnects before accepting more.  The defaults for sync are min of 16 and max
 # unlimited.
-# 
+#
 # For the Hsha server, the min and max both default to quadruple the number of
 # CPU cores.
 #
@@ -297,7 +297,7 @@ incremental_backups: false
 snapshot_before_compaction: false
 
 # Whether or not a snapshot is taken of the data before keyspace truncation
-# or dropping of column families. The STRONGLY advised default of true 
+# or dropping of column families. The STRONGLY advised default of true
 # should be used to provide data safety. If you set this flag to false, you will
 # lose data on truncation or drop.
 auto_snapshot: false
@@ -333,7 +333,7 @@ column_index_size_in_kb: 64
 
 # Multi-threaded compaction. When enabled, each compaction will use
 # up to one thread per core, plus one thread per sstable being merged.
-# This is usually only useful for SSD-based hardware: otherwise, 
+# This is usually only useful for SSD-based hardware: otherwise,
 # your concern is usually to get compaction to do LESS i/o (see:
 # compaction_throughput_mb_per_sec), not more.
 # multithreaded_compaction: false
@@ -420,7 +420,7 @@ endpoint_snitch: PropertyFileSnitch
 
 # controls how often to perform the more expensive part of host score
 # calculation
-dynamic_snitch_update_interval_in_ms: 100 
+dynamic_snitch_update_interval_in_ms: 100
 # controls how often to reset all host scores, allowing a bad host to
 # possibly recover
 dynamic_snitch_reset_interval_in_ms: 600000
@@ -450,7 +450,7 @@ request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 # NoScheduler - Has no options
 # RoundRobin
 #  - throttle_limit -- The throttle_limit is the number of in-flight
-#                      requests per client.  Requests beyond 
+#                      requests per client.  Requests beyond
 #                      that limit are queued up until
 #                      running requests can complete.
 #                      The value of 80 here is twice the number of
@@ -510,6 +510,6 @@ server_encryption_options:
     # algorithm: SunX509
     # store_type: JKS
     # cipher_suites: [TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA]
-    
+
 # Tombstone warning threshold
 tombstone_warn_threshold: 2000

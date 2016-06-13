@@ -3,13 +3,15 @@ package io.smartcat.migration;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
+/**
+ * Class which holds set of migrations.
+ */
 public class MigrationResources {
 
     private final Set<Migration> migrations = new LinkedHashSet<>();
 
     /**
-     * Add Migration object to migration collection
-     * 
+     * Add Migration object to migration collection.
      * @param migration Migration object
      */
     public void addMigration(final Migration migration) {
@@ -19,8 +21,7 @@ public class MigrationResources {
     /**
      * Add Migration object collection to migration collection (set is used as internal collection so no duplicates will
      * be added and order will be preserved meaning that if migration was in collection on position it will stay on that
-     * position)
-     * 
+     * position).
      * @param migrations Migration object list
      */
     public void addMigrations(final Set<Migration> migrations) {
@@ -28,8 +29,7 @@ public class MigrationResources {
     }
 
     /**
-     * Get all Migration objects sorted by order of insert
-     * 
+     * Get all Migration objects sorted by order of insert.
      * @return Sorted list of Migration objects
      */
     public Set<Migration> getMigrations() {
@@ -37,11 +37,9 @@ public class MigrationResources {
     }
 
     /**
-     * Get migration on particular position (position of inserting)
-     * 
+     * Get migration on particular position (position of inserting).
      * @param position of migration in collection
-     * 
-     * @return Migration
+     * @return Migration on provided position
      */
     public Migration getMigration(final int position) {
         return (Migration) this.migrations.toArray()[position];

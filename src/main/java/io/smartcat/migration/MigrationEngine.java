@@ -6,6 +6,10 @@ import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.Session;
 
+/**
+ * Migration engine wraps Migrator and provides DSL like API.
+ *
+ */
 public class MigrationEngine {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngine.class);
@@ -14,8 +18,7 @@ public class MigrationEngine {
     }
 
     /**
-     * Create migrator out of session fully prepared for doing migration of resources
-     * 
+     * Create migrator out of session fully prepared for doing migration of resources.
      * @param session Datastax driver session object
      * @return migrator instance with versioner and session which can migrate resources
      */
@@ -23,10 +26,17 @@ public class MigrationEngine {
         return new Migrator(session);
     }
 
+    /**
+     * Migrator handles migrations and errors.
+     */
     public static class Migrator {
         private final Session session;
         private final CassandraVersioner versioner;
 
+        /**
+         * Create new Migrator with active Cassandra session.
+         * @param session Active Cassandra session
+         */
         public Migrator(final Session session) {
             this.session = session;
             this.versioner = new CassandraVersioner(session);

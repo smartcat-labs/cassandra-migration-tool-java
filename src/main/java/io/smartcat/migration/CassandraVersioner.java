@@ -10,15 +10,18 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
+/**
+ * Class responsible for version management.
+ */
 public class CassandraVersioner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CassandraVersioner.class);
 
-    public static final String SCHEMA_VERSION_CF = "schema_version";
-    public static final String TYPE = "type";
-    public static final String VERSION = "version";
-    public static final String TIMESTAMP = "ts";
-    public static final String DESCRIPTION = "description";
+    private static final String SCHEMA_VERSION_CF = "schema_version";
+    private static final String TYPE = "type";
+    private static final String VERSION = "version";
+    private static final String TIMESTAMP = "ts";
+    private static final String DESCRIPTION = "description";
 
     private static final String CREATE_SCHEMA_VERSION_CQL = String.format("CREATE TABLE IF NOT EXISTS %s (",
             SCHEMA_VERSION_CF)
@@ -31,6 +34,10 @@ public class CassandraVersioner {
 
     private final Session session;
 
+    /**
+     * Create Cassandra versioner for active session.
+     * @param session Active Cassandra session
+     */
     public CassandraVersioner(final Session session) {
         this.session = session;
 

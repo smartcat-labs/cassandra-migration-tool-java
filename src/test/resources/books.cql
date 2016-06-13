@@ -6,9 +6,9 @@
 CREATE KEYSPACE migration_test_books WITH replication = { 'class': 'NetworkTopologyStrategy', 'DC1': '1' };
 USE migration_test_books;
 
-/* Books */ 
+/* Books */
 CREATE TABLE books (
-	name text,
-	author text,
-	PRIMARY KEY (author, name)
+    name text,
+    author text,
+    PRIMARY KEY (author, name)
 ) WITH COMMENT='Books by author';

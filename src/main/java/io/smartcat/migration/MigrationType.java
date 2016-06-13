@@ -1,5 +1,15 @@
 package io.smartcat.migration;
 
+/**
+ * Enumeration for migration types (SCHEMA or DATA).
+ */
 public enum MigrationType {
-    SCHEMA, DATA;
+    /**
+     * Schema migration type.
+     */
+    SCHEMA,
+    /**
+     * Data migration type.
+     */
+    DATA;
 }

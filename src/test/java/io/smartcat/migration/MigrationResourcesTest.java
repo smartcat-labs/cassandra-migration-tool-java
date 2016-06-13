@@ -4,10 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import io.smartcat.migration.Migration;
-import io.smartcat.migration.MigrationResources;
-import io.smartcat.migration.MigrationType;
-
 public class MigrationResourcesTest {
 
     @Test
