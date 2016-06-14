@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "suppressions_1_1.dtd">
+
+<suppressions>
+    <!-- Exclude JavaDoc for tests -->
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="JavadocMethod" />
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="JavadocVariable" />
+    <suppress files="[\\/]src[\\/]test[\\/].*" checks="JavadocType" />
+
+    <!-- Exclude JavaDoc for integration tests -->
+    <suppress files="[\\/]src[\\/]integration-test[\\/].*" checks="JavadocMethod" />
+    <suppress files="[\\/]src[\\/]integration-test[\\/].*" checks="JavadocVariable" />
+    <suppress files="[\\/]src[\\/]integration-test[\\/].*" checks="JavadocType" />
+
+    <!-- Allow underscores in method names for tests -->
+    <suppress files="[\\/]src[\\/]test[\\/].*" id="MethodNameRegular" />
+    <suppress files="[\\/]src[\\/]integration-test[\\/].*" id="MethodNameRegular" />
+
+    <!-- Prevent underscores in method names for production code -->
+    <suppress files="[\\/]src[\\/]main[\\/].*" id="MethodNameTest" />
+</suppressions>

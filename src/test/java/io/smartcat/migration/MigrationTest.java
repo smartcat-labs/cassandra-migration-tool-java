@@ -5,9 +5,6 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import io.smartcat.migration.Migration;
-import io.smartcat.migration.MigrationType;
-
 public class MigrationTest {
 
     @Test

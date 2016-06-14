@@ -8,8 +8,8 @@ USE migration_test_items;
 
 /* Items by id */
 CREATE TABLE items_by_id (
-	id uuid,
-	number text,
-	external_id uuid,
-	PRIMARY KEY (id)
+    id uuid,
+    number text,
+    external_id uuid,
+    PRIMARY KEY (id)
 ) WITH COMMENT='Items by item ID';

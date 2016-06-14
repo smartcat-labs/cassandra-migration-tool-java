@@ -3,26 +3,35 @@ package io.smartcat.migration;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
+
 import io.smartcat.migration.exceptions.MigrationException;
 import io.smartcat.migration.exceptions.SchemaAgreementException;
 
 /**
- * Abstract migration class that implements session DI and exposes required methods for execution
+ * Abstract migration class that implements session DI and exposes required methods for execution.
  */
 public abstract class Migration {
 
     private int version = -1;
     private MigrationType type = MigrationType.SCHEMA;
+
+    /**
+     * Active Cassandra session.
+     */
     protected Session session;
 
+    /**
+     * Create new migration with provided type and version.
+     * @param type Migration type (SCHEMA or DATA)
+     * @param version Migration version
+     */
     public Migration(final MigrationType type, final int version) {
         this.type = type;
         this.version = version;
     }
 
     /**
-     * Enables session injection into migration class
-     * 
+     * Enables session injection into migration class.
      * @param session Session object
      */
     public void setSession(final Session session) {
@@ -30,8 +39,7 @@ public abstract class Migration {
     }
 
     /**
-     * Returns migration type (schema or data)
-     * 
+     * Returns migration type (schema or data).
      * @return Migration type
      */
     public MigrationType getType() {
@@ -39,8 +47,7 @@ public abstract class Migration {
     }
 
     /**
-     * Returns resulting database schema version of this migration
-     * 
+     * Returns resulting database schema version of this migration.
      * @return Resulting db schema version
      */
     public int getVersion() {
@@ -48,13 +55,13 @@ public abstract class Migration {
     }
 
     /**
-     * Returns migration description (for history purposes)
+     * Returns migration description (for history purposes).
+     * @return migration description.
      */
     public abstract String getDescription();
 
-	/**
-     * Executes migration implementation
-     *
+    /**
+     * Executes migration implementation.
      * @throws MigrationException exception
      */
     public abstract void execute() throws MigrationException;
@@ -66,8 +73,7 @@ public abstract class Migration {
      * @throws SchemaAgreementException exception
      */
     protected void executeWithSchemaAgreement(Statement statement)
-            throws SchemaAgreementException
-    {
+            throws SchemaAgreementException {
         ResultSet result = this.session.execute(statement);
         if (checkSchemaAgreement(result)) {
             return;
@@ -83,20 +89,18 @@ public abstract class Migration {
     /**
      * Whether the cluster had reached schema agreement after the execution of this query.
      *
-     * After a successful schema-altering query (ex: creating a table), the driver
-     * will check if the cluster's nodes agree on the new schema version. If not,
-     * it will keep retrying for a given delay (configurable via
+     * After a successful schema-altering query (ex: creating a table), the driver will check if the cluster's nodes
+     * agree on the new schema version. If not, it will keep retrying for a given delay (configurable via
      * {@link com.datastax.driver.core.Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}).
      *
-     * If this method returns {@code false}, clients can call {@link com.datastax.driver.core.Metadata#checkSchemaAgreement()}
-     * later to perform the check manually.
+     * If this method returns {@code false}, clients can call
+     * {@link com.datastax.driver.core.Metadata#checkSchemaAgreement()} later to perform the check manually.
      *
-     * Note that the schema agreement check is only performed for schema-altering queries
-     * For other query types, this method will always return {@code true}.
+     * Note that the schema agreement check is only performed for schema-altering queries For other query types, this
+     * method will always return {@code true}.
      *
      * @param resultSet Statement execution ResultSet
-     * @return whether the cluster reached schema agreement, or {@code true} for a non
-     * schema-altering statement.
+     * @return whether the cluster reached schema agreement, or {@code true} for a non schema-altering statement.
      */
     protected boolean checkSchemaAgreement(ResultSet resultSet) {
         return resultSet.getExecutionInfo().isSchemaInAgreement();
