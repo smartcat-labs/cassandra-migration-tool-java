@@ -27,6 +27,7 @@ hinted_handoff_enabled: true
 # generated.  After it has been dead this long, hints will be dropped.
 max_hint_window_in_ms: 3600000 # one hour
 
+hints_directory: target/embeddedCassandra/hints
 # DEPRECATED : Sleep this long after delivering each hint
 #hinted_handoff_throttle_delay_in_ms: 1
 
