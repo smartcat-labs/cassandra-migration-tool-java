@@ -45,7 +45,7 @@
             <organizationUrl>http://www.smartcat.io</organizationUrl>
         </developer>
         <developer>
-            <name>Nikola Invancevic</name>
+            <name>Nikola Ivancevic</name>
             <email>nikola.ivancevic@smartcat.io</email>
             <organization>SmartCat</organization>
             <organizationUrl>http://www.smartcat.io</organizationUrl>
@@ -85,12 +85,13 @@
             <artifactId>slf4j-api</artifactId>
             <version>${version.slf4j}</version>
         </dependency>
+
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>${version.guava}</version>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -101,6 +102,7 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
             <version>${version.mockito}</version>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.cassandraunit</groupId>
@@ -118,6 +120,7 @@
             <groupId>org.fusesource</groupId>
             <artifactId>sigar</artifactId>
             <version>1.6.4</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
