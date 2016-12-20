@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.smartcat</groupId>
     <artifactId>cassandra-migration-tool</artifactId>
-    <version>3.1.0.0</version>
+    <version>3.1.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>cassandra-migration-tool</name>
