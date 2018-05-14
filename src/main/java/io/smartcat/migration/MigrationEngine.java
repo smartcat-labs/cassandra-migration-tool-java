@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 import com.datastax.driver.core.Session;
 
 /**
- * Migration engine wraps Migrator and provides DSL like API.
+ * Responsible for applying migrations to production - accepts as arguments an active
+ * cassandra session and a VersionStrategy to determine what migrations to apply. Migrations
+ * to apply are passed as arguments to the migration method.
  *
  */
 public class MigrationEngine {
@@ -39,7 +41,8 @@ public class MigrationEngine {
          */
         public Migrator(final Session session) {
             this.session = session;
-            this.versioner = new CassandraVersioner(session);
+            this.versioner = new CassandraVersioner();
+            versioner.bootstrapSchemaVersionTable(session);
         }
 
         /**
@@ -54,14 +57,14 @@ public class MigrationEngine {
 
             for (final Migration migration : resources.getMigrations()) {
                 final MigrationType type = migration.getType();
-                final int migrationVersion = migration.getVersion();
-                final int version = versioner.getCurrentVersion(type);
+                final Comparable migrationVersion = migration.getVersion();
+                final int version = versioner.getCurrentVersion(session, migration.getType());
 
                 LOGGER.info("Db is version {} for type {}.", version, type.name());
                 LOGGER.info("Compare {} migration version {} with description {}", type.name(), migrationVersion,
                         migration.getDescription());
 
-                if (migrationVersion <= version) {
+                if (migrationVersion.compareTo(version) <= 0) {
                     LOGGER.warn("Skipping migration [{}] with version {} since db is on higher version {}.",
                             migration.getDescription(), migrationVersion, version);
                     continue;
@@ -86,7 +89,9 @@ public class MigrationEngine {
                 LOGGER.info("Migration [{}] to version {} finished in {} seconds.", migration.getDescription(),
                         migrationVersion, seconds);
 
-                if (!versioner.updateVersion(migration)) {
+                try {
+                    versioner.markMigrationAsApplied(session, migration);
+                } catch (final Exception e) {
                     LOGGER.error("Db schema update failed for migration version {}!", migrationVersion);
                     return false;
                 }

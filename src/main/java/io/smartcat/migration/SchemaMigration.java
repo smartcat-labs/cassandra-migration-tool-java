@@ -3,7 +3,7 @@ package io.smartcat.migration;
 /**
  * Schema migration for migrations manipulating schema.
  */
-public abstract class SchemaMigration extends Migration {
+public abstract class SchemaMigration extends Migration<Integer> {
 
     /**
      * Create new schema migration with provided version.

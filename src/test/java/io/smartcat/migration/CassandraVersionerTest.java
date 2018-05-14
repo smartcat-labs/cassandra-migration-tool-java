@@ -26,7 +26,7 @@ public class CassandraVersionerTest {
     @Before
     public void setUp() throws Exception {
         session = mock(Session.class);
-        versioner = new CassandraVersioner(session);
+        versioner = new CassandraVersioner();
         versionResultSet = mock(ResultSet.class);
     }
 
@@ -34,7 +34,7 @@ public class CassandraVersionerTest {
     public void whenSchemaVersionTableIsEmptyThenCurrentVersionShouldBe0() throws Exception {
         expectRetrieveEmptyCurrentVersion();
 
-        int currentVersion = versioner.getCurrentVersion(SCHEMA);
+        int currentVersion = versioner.getCurrentVersion(session, SCHEMA);
 
         assertThat(currentVersion, is(0));
     }
@@ -45,14 +45,14 @@ public class CassandraVersionerTest {
 
         expectRetrieveCurrentVersion(expectedVersion);
 
-        int currentVersion = versioner.getCurrentVersion(SCHEMA);
+        int currentVersion = versioner.getCurrentVersion(session, SCHEMA);
 
         assertThat(currentVersion, is(expectedVersion));
     }
 
     @Test
     public void updateVersionSucess() throws Exception {
-        versioner.updateVersion(new AddBookGenreFieldMigration(1));
+        versioner.markMigrationAsApplied(session, new AddBookGenreFieldMigration(1));
     }
 
     private void expectRetrieveEmptyCurrentVersion() {

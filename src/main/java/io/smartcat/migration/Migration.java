@@ -9,10 +9,11 @@ import io.smartcat.migration.exceptions.SchemaAgreementException;
 
 /**
  * Abstract migration class that implements session DI and exposes required methods for execution.
+ * @param <T> type of the version in the database schema describing migration applied
  */
-public abstract class Migration {
+public abstract class Migration<T extends Comparable> {
 
-    private int version = -1;
+    private T version;
     private MigrationType type = MigrationType.SCHEMA;
 
     /**
@@ -25,7 +26,7 @@ public abstract class Migration {
      * @param type Migration type (SCHEMA or DATA)
      * @param version Migration version
      */
-    public Migration(final MigrationType type, final int version) {
+    public Migration(final MigrationType type, final T version) {
         this.type = type;
         this.version = version;
     }
@@ -50,7 +51,7 @@ public abstract class Migration {
      * Returns resulting database schema version of this migration.
      * @return Resulting db schema version
      */
-    public int getVersion() {
+    public T getVersion() {
         return this.version;
     }
 
@@ -126,7 +127,7 @@ public abstract class Migration {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((type == null) ? 0 : type.hashCode());
-        result = prime * result + version;
+        result = prime * result + version.hashCode();
         return result;
     }
 
