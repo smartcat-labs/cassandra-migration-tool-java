@@ -2,6 +2,8 @@ package io.smartcat.migration;
 
 import com.datastax.driver.core.Session;
 
+import java.util.Set;
+
 /**
  * Class describing the responsibilities for versioning schema upgrades: mark them
  * as applied in a table, create the table if it doesn't exist, determine which
@@ -27,5 +29,20 @@ public abstract class AbstractVersioner<T> {
      * @param migration Migration that updated the database version
      */
     public abstract void markMigrationAsApplied(Session session, Migration migration);
+
+    /**
+     * @param session active cassandra session
+     * @param migrationType type of migration
+     * @return a set of migration versions which have not yet been applied
+     */
+    public abstract Set<T> getUpdatesApplied(Session session, MigrationType migrationType);
+
+    /**
+     * @param session active cassandra session
+     * @param migrationType type of migration
+     * @return the version of the most recently applied update
+     */
+    public abstract T getMostRecentUpdateApplied(Session session, MigrationType migrationType);
+
 
 }

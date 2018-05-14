@@ -10,6 +10,9 @@ import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 /**
  * Class responsible for version management.
@@ -52,17 +55,13 @@ public class CassandraVersioner
      * migration history is saved ordered descending by timestamp. If there are no rows in the schema_version table,
      * return 0 as default database version. Data version is changed by executing migrations.
      *
+     * @deprecated use #getMostRecentUpdateApplied()
      * @param session Active cassandra session
      * @param type Migration type
      * @return Database version for given type
      */
     public int getCurrentVersion(final Session session, final MigrationType type) {
-        final Statement select = QueryBuilder.select().all().from(SCHEMA_VERSION_CF)
-                .where(QueryBuilder.eq(TYPE, type.name())).limit(1).setConsistencyLevel(ConsistencyLevel.ALL);
-        final ResultSet result = session.execute(select);
-
-        final Row row = result.one();
-        return row == null ? 0 : row.getInt(VERSION);
+        return getMostRecentUpdateApplied(session, type);
     }
 
     @Override
@@ -72,6 +71,25 @@ public class CassandraVersioner
                 .value(DESCRIPTION, migration.getDescription()).setConsistencyLevel(ConsistencyLevel.ALL);
 
         session.execute(insert);
+    }
+
+    @Override
+    public Set<Integer> getUpdatesApplied(Session session, MigrationType migrationType) {
+        final Statement statement = QueryBuilder.select().all().from(SCHEMA_VERSION_CF)
+                .where(QueryBuilder.eq(TYPE, migrationType.name()))
+                .setConsistencyLevel(ConsistencyLevel.ALL);
+        final ResultSet resultSet = session.execute(statement);
+        return resultSet.all().stream().map(row -> row.getInt(VERSION)).collect(Collectors.toSet());
+    }
+
+    @Override
+    public Integer getMostRecentUpdateApplied(Session session, MigrationType migrationType) {
+        final Statement select = QueryBuilder.select().all().from(SCHEMA_VERSION_CF)
+                .where(QueryBuilder.eq(TYPE, migrationType.name())).limit(1).setConsistencyLevel(ConsistencyLevel.ALL);
+        final ResultSet result = session.execute(select);
+
+        final Row row = result.one();
+        return row == null ? 0 : row.getInt(VERSION);
     }
 
 }

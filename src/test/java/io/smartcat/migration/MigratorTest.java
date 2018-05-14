@@ -109,7 +109,7 @@ public class MigratorTest extends BaseTest {
     }
 
     @Test
-    public void skipMigrationWithVersionOlderThanCurrentSchemaVersion() throws Exception {
+    public void doNotSkipMigrationWithVersionOlderThanCurrentSchemaVersion() throws Exception {
         Migration migrationWithNewerVersion = new AddBookGenreFieldMigration(2);
         Migration migrationWithOlderVersion = new AddBookISBNFieldMigration(1);
 
@@ -121,7 +121,7 @@ public class MigratorTest extends BaseTest {
 
         // verify
         assertThat(getCurrentVersion(), is(migrationWithNewerVersion.getVersion()));
-        assertTableDoesntContainsColumns("books", "isbn");
+        assertTableContainsColumns("books", "isbn");
     }
 
     @Test

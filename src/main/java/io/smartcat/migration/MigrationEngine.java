@@ -30,6 +30,7 @@ public class MigrationEngine {
 
     /**
      * Migrator handles migrations and errors.
+     * @deprecated do not use - kept for compatability reasons
      */
     public static class Migrator {
         private final Session session;
@@ -64,8 +65,8 @@ public class MigrationEngine {
                 LOGGER.info("Compare {} migration version {} with description {}", type.name(), migrationVersion,
                         migration.getDescription());
 
-                if (migrationVersion.compareTo(version) <= 0) {
-                    LOGGER.warn("Skipping migration [{}] with version {} since db is on higher version {}.",
+                if (versioner.getUpdatesApplied(session, migration.getType()).contains(migration.getVersion())) {
+                    LOGGER.warn("Skipping migration [{}] with version {} since db already has it applied {}.",
                             migration.getDescription(), migrationVersion, version);
                     continue;
                 }
