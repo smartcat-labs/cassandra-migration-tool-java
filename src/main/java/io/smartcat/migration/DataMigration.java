@@ -3,7 +3,7 @@ package io.smartcat.migration;
 /**
  * Data migration for migrations manipulating data.
  */
-public abstract class DataMigration extends Migration {
+public abstract class DataMigration extends Migration<Integer> {
 
     /**
      * Creates new data migration.

@@ -1,13 +1,14 @@
 package io.smartcat.migration.migrations.schema;
 
 import com.datastax.driver.core.SimpleStatement;
-import io.smartcat.migration.SchemaMigration;
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationType;
 import io.smartcat.migration.exceptions.MigrationException;
 
-public class CreateItemByNumberAndExternalIdMigration extends SchemaMigration {
+public class CreateItemByNumberAndExternalIdMigration<T extends Comparable> extends Migration {
 
-    public CreateItemByNumberAndExternalIdMigration(final int version) {
-        super(version);
+    public CreateItemByNumberAndExternalIdMigration(final T version) {
+        super(MigrationType.SCHEMA, version);
     }
 
     @Override

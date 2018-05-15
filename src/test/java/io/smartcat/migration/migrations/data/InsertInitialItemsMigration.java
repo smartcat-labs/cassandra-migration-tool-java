@@ -1,17 +1,18 @@
 package io.smartcat.migration.migrations.data;
 
 import com.datastax.driver.core.PreparedStatement;
-import io.smartcat.migration.DataMigration;
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationType;
 import io.smartcat.migration.exceptions.MigrationException;
 
 import java.util.UUID;
 
-public class InsertInitialItemsMigration extends DataMigration {
+public class InsertInitialItemsMigration<T extends Comparable> extends Migration {
 
     private final int count;
 
-    public InsertInitialItemsMigration(final int count, final int version) {
-        super(version);
+    public InsertInitialItemsMigration(final int count, final T version) {
+        super(MigrationType.DATA, version);
         this.count = count;
     }
 

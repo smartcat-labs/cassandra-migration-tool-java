@@ -55,7 +55,7 @@ public class MigratorTest extends BaseTest {
         final CQLDataLoader cqlDataLoader = new CQLDataLoader(session);
         cqlDataLoader.load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
 
-        versioner = new CassandraVersioner(session);
+        versioner = new CassandraVersioner();
         migrator = MigrationEngine.withSession(session);
         metadataAnalyzer = new CassandraMetadataAnalyzer(session);
     }
@@ -109,7 +109,7 @@ public class MigratorTest extends BaseTest {
     }
 
     @Test
-    public void skipMigrationWithVersionOlderThanCurrentSchemaVersion() throws Exception {
+    public void doNotSkipMigrationWithVersionOlderThanCurrentSchemaVersion() throws Exception {
         Migration migrationWithNewerVersion = new AddBookGenreFieldMigration(2);
         Migration migrationWithOlderVersion = new AddBookISBNFieldMigration(1);
 
@@ -121,7 +121,7 @@ public class MigratorTest extends BaseTest {
 
         // verify
         assertThat(getCurrentVersion(), is(migrationWithNewerVersion.getVersion()));
-        assertTableDoesntContainsColumns("books", "isbn");
+        assertTableContainsColumns("books", "isbn");
     }
 
     @Test
@@ -138,7 +138,7 @@ public class MigratorTest extends BaseTest {
     }
 
     private int getCurrentVersion() {
-        return versioner.getCurrentVersion(MigrationType.SCHEMA);
+        return versioner.getCurrentVersion(session, MigrationType.SCHEMA);
     }
 
     private void assertTableDoesntContainsColumns(String table, String... columns) {
