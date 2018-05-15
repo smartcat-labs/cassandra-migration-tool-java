@@ -52,7 +52,7 @@ public class CassandraVersionerTest {
 
     @Test
     public void updateVersionSucess() throws Exception {
-        versioner.markMigrationAsApplied(session, new AddBookGenreFieldMigration(1));
+        versioner.markMigrationAsApplied(session, new AddBookGenreFieldMigration<>(1));
     }
 
     private void expectRetrieveEmptyCurrentVersion() {
