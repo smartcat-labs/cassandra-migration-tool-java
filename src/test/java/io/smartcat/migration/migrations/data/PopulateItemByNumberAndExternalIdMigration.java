@@ -6,13 +6,14 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
-import io.smartcat.migration.DataMigration;
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationType;
 import io.smartcat.migration.exceptions.MigrationException;
 
-public class PopulateItemByNumberAndExternalIdMigration extends DataMigration {
+public class PopulateItemByNumberAndExternalIdMigration<T extends Comparable> extends Migration {
 
-    public PopulateItemByNumberAndExternalIdMigration(final int version) {
-        super(version);
+    public PopulateItemByNumberAndExternalIdMigration(final T version) {
+        super(MigrationType.DATA, version);
     }
 
     @Override

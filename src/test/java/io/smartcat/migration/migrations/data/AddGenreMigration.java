@@ -7,16 +7,17 @@ import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
 
-import io.smartcat.migration.DataMigration;
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationType;
 import io.smartcat.migration.exceptions.MigrationException;
 
 /**
  * Example of data migration which will go through all entries in DB and for each add genre. Real life example which
  * covers this case is adding of new column to DB and need to populate it with some data for already existing entries
  */
-public class AddGenreMigration extends DataMigration {
-    public AddGenreMigration(final int version) {
-        super(version);
+public class AddGenreMigration<T extends Comparable> extends Migration {
+    public AddGenreMigration(final T version) {
+        super(MigrationType.DATA, version);
     }
 
     @Override

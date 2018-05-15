@@ -2,17 +2,18 @@ package io.smartcat.migration.migrations.data;
 
 import com.datastax.driver.core.PreparedStatement;
 
-import io.smartcat.migration.DataMigration;
+import io.smartcat.migration.Migration;
+import io.smartcat.migration.MigrationType;
 import io.smartcat.migration.exceptions.MigrationException;
 
 /**
  * Example of data migration used for populating data in table. This shows use case when you need to populate data in
  * table fast. Can be used for test data, logic can be added to add near production like data in huge amounts.
  */
-public class InsertBooksMigration extends DataMigration {
+public class InsertBooksMigration<T extends Comparable> extends Migration {
 
-    public InsertBooksMigration(final int version) {
-        super(version);
+    public InsertBooksMigration(final T version) {
+        super(MigrationType.DATA, version);
     }
 
     @Override
