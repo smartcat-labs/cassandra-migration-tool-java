@@ -1,6 +1,6 @@
 package io.smartcat.migration.migrations.schema;
 
-import com.datastax.driver.core.SimpleStatement;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 import io.smartcat.migration.SchemaMigration;
 import io.smartcat.migration.exceptions.MigrationException;
 
@@ -25,7 +25,7 @@ public class CreateItemByNumberAndExternalIdMigration extends SchemaMigration {
                             "external_id uuid," +
                             "PRIMARY KEY ((number, external_id))" +
                     ") WITH COMMENT='Items by item number and external id';";
-            executeWithSchemaAgreement(new SimpleStatement(statement));
+            executeWithSchemaAgreement(SimpleStatement.newInstance(statement));
 
         } catch (final Exception e) {
             throw new MigrationException("Failed to execute CreateItemsByNumberAndExternalIdMigration migration", e);

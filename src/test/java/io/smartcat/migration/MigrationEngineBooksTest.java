@@ -1,6 +1,6 @@
 package io.smartcat.migration;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
@@ -10,13 +10,14 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.net.InetSocketAddress;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 
 import io.smartcat.migration.migrations.data.AddGenreMigration;
 import io.smartcat.migration.migrations.data.InsertBooksMigration;
@@ -26,34 +27,31 @@ public class MigrationEngineBooksTest extends BaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngineBooksTest.class);
 
+    private static final String LOCAL_DATACENTER = "DC1";
     private static final String CONTACT_POINT = "localhost";
     private static final int PORT = 9142;
     private static final String KEYSPACE = "migration_test_books";
     private static final String CQL = "books.cql";
 
-    private static Session session;
-    private static Cluster cluster;
+    private static CqlSession session;
 
     @BeforeClass
     public static void init() throws Exception {
         LOGGER.info("Starting embedded cassandra server");
         EmbeddedCassandraServerHelper.startEmbeddedCassandra("another-cassandra.yaml");
 
-        LOGGER.info("Connect to embedded db");
-        cluster = Cluster.builder().addContactPoints(CONTACT_POINT).withPort(PORT).build();
-        session = cluster.connect();
+        session = new CqlSessionBuilder()
+                .withLocalDatacenter(LOCAL_DATACENTER)
+                .addContactPoint(new InetSocketAddress(CONTACT_POINT, PORT))
+                .build();
 
         LOGGER.info("Initialize keyspace");
-        final CQLDataLoader cqlDataLoader = new CQLDataLoader(session);
-        cqlDataLoader.load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
+        new CQLDataLoader(session).load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
     }
 
     @AfterClass
     public static void tearDown() {
-        if (cluster != null) {
-            cluster.close();
-            cluster = null;
-        }
+        session.close();
     }
 
     @Test
@@ -76,7 +74,7 @@ public class MigrationEngineBooksTest extends BaseTest {
         resources.addMigration(new AddGenreMigration(2));
         MigrationEngine.withSession(session).migrate(resources);
 
-        final Statement select = QueryBuilder.select().all().from("books");
+        final SimpleStatement select = QueryBuilder.selectFrom("books").all().build();
         final ResultSet results = session.execute(select);
 
         for (final Row row : results) {

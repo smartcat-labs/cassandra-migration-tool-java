@@ -2,9 +2,7 @@ package io.smartcat.migration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import org.cassandraunit.CQLDataLoader;
 import org.cassandraunit.dataset.cql.ClassPathCQLDataSet;
@@ -15,9 +13,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.net.InetSocketAddress;
 
-import com.datastax.driver.core.Cluster;
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
 
 import io.smartcat.migration.MigrationEngine.Migrator;
 import io.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
@@ -26,13 +25,13 @@ import io.smartcat.migration.migrations.schema.AddBookISBNFieldMigration;
 public class MigratorTest extends BaseTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(MigratorTest.class);
 
+    private static final String LOCAL_DATACENTER = "DC1";
     private static final String CONTACT_POINT = "localhost";
     private static final int PORT = 9142;
     private static final String KEYSPACE = "migration_test_books";
     private static final String CQL = "books.cql";
 
-    private static Session session;
-    private static Cluster cluster;
+    private static CqlSession session;
 
     private CassandraVersioner versioner;
     private Migrator migrator;
@@ -45,15 +44,16 @@ public class MigratorTest extends BaseTest {
         EmbeddedCassandraServerHelper.startEmbeddedCassandra("another-cassandra.yaml");
 
         LOGGER.info("Connect to embedded db");
-        cluster = Cluster.builder().addContactPoints(CONTACT_POINT).withPort(PORT).build();
-        session = cluster.connect();
+        session = new CqlSessionBuilder()
+                .withLocalDatacenter(LOCAL_DATACENTER)
+                .addContactPoint(new InetSocketAddress(CONTACT_POINT, PORT))
+                .build();
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         LOGGER.info("Initialize keyspace");
-        final CQLDataLoader cqlDataLoader = new CQLDataLoader(session);
-        cqlDataLoader.load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
+        new CQLDataLoader(session).load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
 
         versioner = new CassandraVersioner(session);
         migrator = MigrationEngine.withSession(session);
@@ -62,14 +62,11 @@ public class MigratorTest extends BaseTest {
 
     @AfterClass
     public static void tearDown() {
-        if (cluster != null) {
-            cluster.close();
-            cluster = null;
-        }
+        session.close();
     }
 
     @Test
-    public void executeOneMigration() throws Exception {
+    public void executeOneMigration() {
         assertTableDoesntContainsColumns("books", "genre");
 
         final MigrationResources resources = new MigrationResources();
@@ -81,7 +78,7 @@ public class MigratorTest extends BaseTest {
     }
 
     @Test
-    public void executeTwoMigrations() throws Exception {
+    public void executeTwoMigrations() {
         assertTableDoesntContainsColumns("books", "genre", "isbn");
 
         final MigrationResources resources = new MigrationResources();
@@ -94,7 +91,7 @@ public class MigratorTest extends BaseTest {
     }
 
     @Test
-    public void updateVersionAfterMigration() throws Exception {
+    public void updateVersionAfterMigration() {
         int versionBeforeMigration = getCurrentVersion();
 
         Migration migration = new AddBookGenreFieldMigration(1);
@@ -109,7 +106,7 @@ public class MigratorTest extends BaseTest {
     }
 
     @Test
-    public void skipMigrationWithVersionOlderThanCurrentSchemaVersion() throws Exception {
+    public void skipMigrationWithVersionOlderThanCurrentSchemaVersion() {
         Migration migrationWithNewerVersion = new AddBookGenreFieldMigration(2);
         Migration migrationWithOlderVersion = new AddBookISBNFieldMigration(1);
 
@@ -125,7 +122,7 @@ public class MigratorTest extends BaseTest {
     }
 
     @Test
-    public void skipMigrationWithSameVersionThanCurrentSchemaVersion() throws Exception {
+    public void skipMigrationWithSameVersionThanCurrentSchemaVersion() {
         int versionBeforeMigration = getCurrentVersion();
 
         final MigrationResources resources = new MigrationResources();
