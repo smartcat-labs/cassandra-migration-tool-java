@@ -1,8 +1,8 @@
 package io.smartcat.migration;
 
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Session;
-import com.datastax.driver.core.Statement;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.cql.ResultSet;
+import com.datastax.oss.driver.api.core.cql.Statement;
 
 import io.smartcat.migration.exceptions.MigrationException;
 import io.smartcat.migration.exceptions.SchemaAgreementException;
@@ -18,14 +18,14 @@ public abstract class Migration {
     /**
      * Active Cassandra session.
      */
-    protected Session session;
+    protected CqlSession session;
 
     /**
      * Create new migration with provided type and version.
      * @param type Migration type (SCHEMA or DATA)
      * @param version Migration version
      */
-    public Migration(final MigrationType type, final int version) {
+    protected Migration(final MigrationType type, final int version) {
         this.type = type;
         this.version = version;
     }
@@ -34,7 +34,7 @@ public abstract class Migration {
      * Enables session injection into migration class.
      * @param session Session object
      */
-    public void setSession(final Session session) {
+    public void setSession(final CqlSession session) {
         this.session = session;
     }
 
@@ -78,7 +78,7 @@ public abstract class Migration {
         if (checkSchemaAgreement(result)) {
             return;
         }
-        if (checkClusterSchemaAgreement()) {
+        if (checkSchemaAgreement()) {
             return;
         }
 
@@ -90,11 +90,11 @@ public abstract class Migration {
      * Whether the cluster had reached schema agreement after the execution of this query.
      *
      * After a successful schema-altering query (ex: creating a table), the driver will check if the cluster's nodes
-     * agree on the new schema version. If not, it will keep retrying for a given delay (configurable via
-     * {@link com.datastax.driver.core.Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}).
+     * agree on the new schema version.
      *
      * If this method returns {@code false}, clients can call
-     * {@link com.datastax.driver.core.Metadata#checkSchemaAgreement()} later to perform the check manually.
+     * {@link com.datastax.oss.driver.internal.core.cql.DefaultExecutionInfo#isSchemaInAgreement()}
+     * later to perform the check manually.
      *
      * Note that the schema agreement check is only performed for schema-altering queries For other query types, this
      * method will always return {@code true}.
@@ -109,16 +109,12 @@ public abstract class Migration {
     /**
      * Checks whether hosts that are currently up agree on the schema definition.
      *
-     * This method performs a one-time check only, without any form of retry; therefore
-     * {@link com.datastax.driver.core.Cluster.Builder#withMaxSchemaAgreementWaitSeconds(int)}
-     * does not apply in this case.
-     *
      * @return {@code true} if all hosts agree on the schema; {@code false} if
      * they don't agree, or if the check could not be performed
      * (for example, if the control connection is down).
      */
-    protected boolean checkClusterSchemaAgreement() {
-        return this.session.getCluster().getMetadata().checkSchemaAgreement();
+    protected boolean checkSchemaAgreement() {
+        return this.session.checkSchemaAgreement();
     }
 
     @Override

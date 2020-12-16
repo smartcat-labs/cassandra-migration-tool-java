@@ -1,6 +1,6 @@
 package io.smartcat.migration.migrations.data;
 
-import com.datastax.driver.core.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
 import io.smartcat.migration.DataMigration;
 import io.smartcat.migration.exceptions.MigrationException;
 

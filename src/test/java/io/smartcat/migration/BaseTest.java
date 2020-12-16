@@ -1,28 +1,25 @@
 package io.smartcat.migration;
 
-import com.datastax.driver.core.*;
+import com.datastax.oss.driver.api.core.CqlIdentifier;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.metadata.Metadata;
+import com.datastax.oss.driver.api.core.metadata.schema.KeyspaceMetadata;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class BaseTest {
 
-    public void truncateTables(final String keyspace, final Session session) {
-        for (final String table : tables(keyspace, session)) {
+    public void truncateTables(final String keyspace, final CqlSession session) {
+        for (final CqlIdentifier table : tables(keyspace, session)) {
             session.execute(String.format("TRUNCATE %s.%s;", keyspace, table));
         }
     }
 
-    private List<String> tables(final String keyspace, final Session session) {
-        final List<String> tables = new ArrayList<>();
-        final Cluster cluster = session.getCluster();
-        final Metadata meta = cluster.getMetadata();
-        final KeyspaceMetadata keyspaceMeta = meta.getKeyspace(keyspace);
-        for (final TableMetadata tableMeta : keyspaceMeta.getTables()) {
-            tables.add(tableMeta.getName());
-        }
+    private Set<CqlIdentifier> tables(final String keyspace, final CqlSession session) {
+        final Metadata meta = session.getMetadata();
+        final KeyspaceMetadata keyspaceMeta = meta.getKeyspace(keyspace).get();
 
-        return tables;
+        return keyspaceMeta.getTables().keySet();
     }
 
 }

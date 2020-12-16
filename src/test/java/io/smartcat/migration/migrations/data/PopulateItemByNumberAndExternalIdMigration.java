@@ -2,9 +2,10 @@ package io.smartcat.migration.migrations.data;
 
 import java.util.List;
 
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.cql.PreparedStatement;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 
 import io.smartcat.migration.DataMigration;
 import io.smartcat.migration.exceptions.MigrationException;
@@ -27,10 +28,11 @@ public class PopulateItemByNumberAndExternalIdMigration extends DataMigration {
                     session.prepare(
                             "INSERT INTO items_by_number_external_id (id, number, external_id) VALUES (?, ?, ?);");
 
-            final List<Row> rows = session.execute(QueryBuilder.select().from("items_by_id").setFetchSize(1000)).all();
+            final SimpleStatement select = QueryBuilder.selectFrom("items_by_id").all().limit(1000).build();
+            final List<Row> rows = session.execute(select).all();
             for (Row row : rows) {
                 session.execute(
-                        preparedStatement.bind(row.getUUID("id"), row.getString("number"), row.getUUID("external_id")));
+                        preparedStatement.bind(row.getUuid("id"), row.getString("number"), row.getUuid("external_id")));
             }
         } catch (final Exception e) {
             throw new MigrationException("Failed to execute PopulateItemByNumberAndExternalId migration", e);

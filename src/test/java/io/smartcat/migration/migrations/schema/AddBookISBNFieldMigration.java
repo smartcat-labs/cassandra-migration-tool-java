@@ -1,6 +1,6 @@
 package io.smartcat.migration.migrations.schema;
 
-import com.datastax.driver.core.SimpleStatement;
+import com.datastax.oss.driver.api.core.cql.SimpleStatement;
 
 import io.smartcat.migration.SchemaMigration;
 import io.smartcat.migration.exceptions.MigrationException;
@@ -24,7 +24,7 @@ public class AddBookISBNFieldMigration extends SchemaMigration {
         try {
             final String alterBooksAddISBNCQL = "ALTER TABLE books ADD isbn text;";
 
-            executeWithSchemaAgreement(new SimpleStatement(alterBooksAddISBNCQL));
+            executeWithSchemaAgreement(SimpleStatement.newInstance(alterBooksAddISBNCQL));
 
         } catch (final Exception e) {
             throw new MigrationException("Failed to execute AddBookISBNField migration", e);

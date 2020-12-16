@@ -1,6 +1,6 @@
 package io.smartcat.migration;
 
-import com.datastax.driver.core.ColumnMetadata;
+import com.datastax.oss.driver.api.core.metadata.schema.ColumnMetadata;
 import com.google.common.base.Predicate;
 
 public class ColumnNameMatcher implements Predicate<ColumnMetadata> {
@@ -11,6 +11,6 @@ public class ColumnNameMatcher implements Predicate<ColumnMetadata> {
     }
 
     public boolean apply(ColumnMetadata column) {
-        return column.getName().equals(columnName);
+        return column.getName().asInternal().equals(columnName);
     }
 }

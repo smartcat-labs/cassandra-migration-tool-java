@@ -1,9 +1,11 @@
 package io.smartcat.migration;
 
-import static junit.framework.Assert.assertEquals;
+import static org.junit.Assert.assertEquals;
 
-import com.datastax.driver.core.*;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.CqlSession;
+import com.datastax.oss.driver.api.core.CqlSessionBuilder;
+import com.datastax.oss.driver.api.core.cql.Row;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 import io.smartcat.migration.migrations.data.InsertInitialItemsMigration;
 import io.smartcat.migration.migrations.data.PopulateItemByNumberAndExternalIdMigration;
 import io.smartcat.migration.migrations.schema.CreateItemByNumberAndExternalIdMigration;
@@ -17,19 +19,20 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 
 public class MigrationEngineItemsTest extends BaseTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MigrationEngineItemsTest.class);
 
+    private static final String LOCAL_DATACENTER = "DC1";
     private static final String CONTACT_POINT = "localhost";
     private static final int PORT = 9142;
     private static final String KEYSPACE = "migration_test_items";
     private static final String CQL = "items.cql";
 
-    private static Session session;
-    private static Cluster cluster;
+    private static CqlSession session;
 
     @BeforeClass
     public static void init() throws Exception {
@@ -37,12 +40,13 @@ public class MigrationEngineItemsTest extends BaseTest {
         EmbeddedCassandraServerHelper.startEmbeddedCassandra("another-cassandra.yaml");
 
         LOGGER.info("Connect to embedded db");
-        cluster = Cluster.builder().addContactPoints(CONTACT_POINT).withPort(PORT).build();
-        session = cluster.connect();
+        session = new CqlSessionBuilder()
+                .withLocalDatacenter(LOCAL_DATACENTER)
+                .addContactPoint(new InetSocketAddress(CONTACT_POINT, PORT))
+                .build();
 
         LOGGER.info("Initialize keyspace");
-        final CQLDataLoader cqlDataLoader = new CQLDataLoader(session);
-        cqlDataLoader.load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
+        new CQLDataLoader(session).load(new ClassPathCQLDataSet(CQL, false, true, KEYSPACE));
     }
 
     @After
@@ -52,10 +56,7 @@ public class MigrationEngineItemsTest extends BaseTest {
 
     @AfterClass
     public static void tearDown() {
-        if (cluster != null) {
-            cluster.close();
-            cluster = null;
-        }
+        EmbeddedCassandraServerHelper.cleanEmbeddedCassandra();
     }
 
     @Test
@@ -68,7 +69,8 @@ public class MigrationEngineItemsTest extends BaseTest {
 
         assertEquals(true, result);
 
-        final List<Row> rows = session.execute(QueryBuilder.select().from("items_by_id")).all();
+        final List<Row> rows = session.execute(QueryBuilder.selectFrom("items_by_id").all().build())
+                .all();
         assertEquals(count, rows.size());
     }
 
@@ -84,7 +86,8 @@ public class MigrationEngineItemsTest extends BaseTest {
 
         assertEquals(true, result);
 
-        final List<Row> rows = session.execute(QueryBuilder.select().from("items_by_number_external_id")).all();
+        final List<Row> rows = session.execute(QueryBuilder.selectFrom("items_by_number_external_id").all().build())
+                .all();
         assertEquals(count, rows.size());
     }
 

@@ -1,11 +1,7 @@
 package io.smartcat.migration.migrations.data;
 
-import com.datastax.driver.core.BoundStatement;
-import com.datastax.driver.core.PreparedStatement;
-import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
-import com.datastax.driver.core.Statement;
-import com.datastax.driver.core.querybuilder.QueryBuilder;
+import com.datastax.oss.driver.api.core.cql.*;
+import com.datastax.oss.driver.api.querybuilder.QueryBuilder;
 
 import io.smartcat.migration.DataMigration;
 import io.smartcat.migration.exceptions.MigrationException;
@@ -34,7 +30,7 @@ public class AddGenreMigration extends DataMigration {
     }
 
     private void addGenreToBooks() {
-        final Statement select = QueryBuilder.select().all().from("books");
+        final SimpleStatement select = QueryBuilder.selectFrom("books").all().build();
         final ResultSet results = this.session.execute(select);
 
         final PreparedStatement updateBookGenreStatement =

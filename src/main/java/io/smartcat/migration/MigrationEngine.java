@@ -4,7 +4,7 @@ import io.smartcat.migration.exceptions.MigrationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.datastax.driver.core.Session;
+import com.datastax.oss.driver.api.core.CqlSession;
 
 /**
  * Migration engine wraps Migrator and provides DSL like API.
@@ -22,7 +22,7 @@ public class MigrationEngine {
      * @param session Datastax driver session object
      * @return migrator instance with versioner and session which can migrate resources
      */
-    public static Migrator withSession(final Session session) {
+    public static Migrator withSession(final CqlSession session) {
         return new Migrator(session);
     }
 
@@ -30,14 +30,14 @@ public class MigrationEngine {
      * Migrator handles migrations and errors.
      */
     public static class Migrator {
-        private final Session session;
+        private final CqlSession session;
         private final CassandraVersioner versioner;
 
         /**
          * Create new Migrator with active Cassandra session.
          * @param session Active Cassandra session
          */
-        public Migrator(final Session session) {
+        public Migrator(final CqlSession session) {
             this.session = session;
             this.versioner = new CassandraVersioner(session);
         }
