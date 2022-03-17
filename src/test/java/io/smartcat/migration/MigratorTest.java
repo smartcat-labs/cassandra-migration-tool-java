@@ -1,5 +1,6 @@
 package io.smartcat.migration;
 
+import static com.datastax.driver.core.ConsistencyLevel.ALL;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertFalse;
@@ -24,6 +25,7 @@ import io.smartcat.migration.migrations.schema.AddBookGenreFieldMigration;
 import io.smartcat.migration.migrations.schema.AddBookISBNFieldMigration;
 
 public class MigratorTest extends BaseTest {
+
     private static final Logger LOGGER = LoggerFactory.getLogger(MigratorTest.class);
 
     private static final String CONTACT_POINT = "localhost";
@@ -138,7 +140,7 @@ public class MigratorTest extends BaseTest {
     }
 
     private int getCurrentVersion() {
-        return versioner.getCurrentVersion(MigrationType.SCHEMA);
+        return versioner.getCurrentVersion(MigrationType.SCHEMA, ALL);
     }
 
     private void assertTableDoesntContainsColumns(String table, String... columns) {

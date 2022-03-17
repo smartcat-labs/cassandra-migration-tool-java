@@ -1,5 +1,6 @@
 package io.smartcat.migration;
 
+import static com.datastax.driver.core.ConsistencyLevel.ALL;
 import static io.smartcat.migration.MigrationType.SCHEMA;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
@@ -34,7 +35,7 @@ public class CassandraVersionerTest {
     public void whenSchemaVersionTableIsEmptyThenCurrentVersionShouldBe0() throws Exception {
         expectRetrieveEmptyCurrentVersion();
 
-        int currentVersion = versioner.getCurrentVersion(SCHEMA);
+        int currentVersion = versioner.getCurrentVersion(SCHEMA, ALL);
 
         assertThat(currentVersion, is(0));
     }
@@ -45,7 +46,7 @@ public class CassandraVersionerTest {
 
         expectRetrieveCurrentVersion(expectedVersion);
 
-        int currentVersion = versioner.getCurrentVersion(SCHEMA);
+        int currentVersion = versioner.getCurrentVersion(SCHEMA, ALL);
 
         assertThat(currentVersion, is(expectedVersion));
     }

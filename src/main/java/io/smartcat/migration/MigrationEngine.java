@@ -1,14 +1,16 @@
 package io.smartcat.migration;
 
-import io.smartcat.migration.exceptions.MigrationException;
+import static com.datastax.driver.core.ConsistencyLevel.ALL;
+import static com.datastax.driver.core.ConsistencyLevel.ONE;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.Session;
 
+import io.smartcat.migration.exceptions.MigrationException;
 /**
  * Migration engine wraps Migrator and provides DSL like API.
- *
  */
 public class MigrationEngine {
 
@@ -30,6 +32,7 @@ public class MigrationEngine {
      * Migrator handles migrations and errors.
      */
     public static class Migrator {
+
         private final Session session;
         private final CassandraVersioner versioner;
 
@@ -55,7 +58,7 @@ public class MigrationEngine {
             for (final Migration migration : resources.getMigrations()) {
                 final MigrationType type = migration.getType();
                 final int migrationVersion = migration.getVersion();
-                final int version = versioner.getCurrentVersion(type);
+                final int version = versioner.getCurrentVersion(type, ONE);
 
                 LOGGER.info("Db is version {} for type {}.", version, type.name());
                 LOGGER.info("Compare {} migration version {} with description {}", type.name(), migrationVersion,
@@ -66,6 +69,8 @@ public class MigrationEngine {
                             migration.getDescription(), migrationVersion, version);
                     continue;
                 }
+
+                checkIfAllReplicasAreUp(type);
 
                 migration.setSession(session);
 
@@ -93,6 +98,17 @@ public class MigrationEngine {
             }
 
             return true;
+        }
+
+        /**
+         * Method that checks if all replicas are up  by getting current migration type with consistency
+         * level ALL. This method will only execute if there are new migrations. Method will throw exception if any of
+         * replicas is down and migration process will break
+         * 
+         * @param type Migration type
+         */
+        private void checkIfAllReplicasAreUp(final MigrationType type) {
+            versioner.getCurrentVersion(type, ALL);
         }
     }
 

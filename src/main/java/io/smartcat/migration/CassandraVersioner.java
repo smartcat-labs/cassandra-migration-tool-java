@@ -50,16 +50,17 @@ public class CassandraVersioner {
     }
 
     /**
-     * Get current database version for given migration type with ALL consistency. Select one row since
-     * migration history is saved ordered descending by timestamp. If there are no rows in the schema_version table,
-     * return 0 as default database version. Data version is changed by executing migrations.
+     * Get current database version for given migration type with ALL consistency. Select one row since migration
+     * history is saved ordered descending by timestamp. If there are no rows in the schema_version table, return 0 as
+     * default database version. Data version is changed by executing migrations.
      *
      * @param type Migration type
+     * @param consistencyLevel Desired consistency level
      * @return Database version for given type
      */
-    public int getCurrentVersion(final MigrationType type) {
+    public int getCurrentVersion(final MigrationType type, final ConsistencyLevel consistencyLevel) {
         final Statement select = QueryBuilder.select().all().from(SCHEMA_VERSION_CF)
-                .where(QueryBuilder.eq(TYPE, type.name())).limit(1).setConsistencyLevel(ConsistencyLevel.ALL);
+                .where(QueryBuilder.eq(TYPE, type.name())).limit(1).setConsistencyLevel(consistencyLevel);
         final ResultSet result = session.execute(select);
 
         final Row row = result.one();
